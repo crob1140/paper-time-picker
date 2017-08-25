@@ -214,7 +214,7 @@ If you include this element as part of `paper-dialog`, use the class
             no-label-float
             on-input="_hoursInputValueChanged"
             on-blur="_hoursInputBlur"
-            on-focus="_hoursInputFocus">
+            on-focus="_inputFocus">
           </paper-input>
           <div class="sep">:</div>
           <paper-input id="minutes-input" 
@@ -225,7 +225,7 @@ If you include this element as part of `paper-dialog`, use the class
             no-label-float
             on-input="_minutesInputValueChanged"
             on-blur="_minutesInputBlur"
-            on-focus="_minutesInputFocus">
+            on-focus="_inputFocus">
           </paper-input>
           <div class="sep" hidden$="[[!enableSeconds]]">:</div>
           <paper-input id="seconds-input" 
@@ -238,7 +238,7 @@ If you include this element as part of `paper-dialog`, use the class
             hidden$="[[!enableSeconds]]"
             on-input="_secondsInputValueChanged"
             on-blur="_secondsInputBlur"
-            on-focus="_secondsInputFocus">
+            on-focus="_inputFocus">
           </paper-input>
         </iron-selector>
         <iron-selector class="period" attr-for-selected="name" selected="{{period}}">
@@ -512,10 +512,6 @@ If you include this element as part of `paper-dialog`, use the class
             this.$['hours-input'].value = this.hour12;
           }
         },
-        _hoursInputFocus: function(ev) {
-          this.$['iron-selector'].selected = "hours";
-          this._selectPaperInput(ev.target);
-        },
         _minuteChanged: function(minute) {
           minute = parseFloat(minute) % 60;
           this.minute = minute;
@@ -532,44 +528,29 @@ If you include this element as part of `paper-dialog`, use the class
           var value = this.$['minutes-input'].value;
           if (isNaN(value) || !value || value > 59) {
             this.$['minutes-input'].value = this._zeroPad(this.minute, 2);
-          }
-        },
-        _minutesInputFocus: function(ev) {
-          this.$['iron-selector'].selected = "minutes";
-          this._selectPaperInput(ev.target);
+            return;
+          }          
+          this.minute = value;
         },
         _secondChanged: function(second) {
           second = parseFloat(second) % 60;
           this.second = second;
-          var input = this.querySelector('#seconds-input');
-          if (input) {
-            input.value = this._zeroPad(second, 2);
-          }
+          this.$['seconds-input'].value = this._zeroPad(second, 2);
         },
         _secondsInputValueChanged: function(value) {
-          var input = this.querySelector('#seconds-input');
-          if (!input) {
-            return;
-          }
-          var value = input.value;
+          var value = this.$['seconds-input'].value;
           if (isNaN(value) || !value || value.length < 2 || value > 59) {
             return;
           }
           this.second = value;   
         },
         _secondsInputBlur: function() {
-          var input = this.querySelector('#seconds-input');
-          if (!input) {
-            return;
-          }
-          var value = input.value;
+          var value = this.$['seconds-input'].value;
           if (isNaN(value) || !value || value > 59) {
-            input.value = this._zeroPad(this.second, 2);
-          }
-        },
-        _secondsInputFocus: function(ev) {
-          this.$['iron-selector'].selected = "seconds";
-          this._selectPaperInput(ev.target);
+            this.$['seconds-input'].value = this._zeroPad(this.second, 2);
+            return;
+          }          
+          this.second = value;
         },
         _periodChanged: function(period) {
           if (isNaN(parseInt(this.hour)) || isNaN(parseInt(this.minute))) {
@@ -590,8 +571,9 @@ If you include this element as part of `paper-dialog`, use the class
         _twelveHour: function(hour) {
           return hour % 12 || 12;
         },
-        _selectPaperInput: function(paperInput) {
-          paperInput.$.input.select();
+        _inputFocus: function(ev) {
+          this.$['iron-selector'].selected = ev.target.name;
+          ev.target.$.input.select();
         },
         _isEqual: function(a, b) {
           return a === b;
