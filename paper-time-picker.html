@@ -514,7 +514,7 @@ If you include this element as part of `paper-dialog`, use the class
         },
         _hoursInputFocus: function(ev) {
           this.$['iron-selector'].selected = "hours";
-          this._selectAll(ev);
+          this._selectPaperInput(ev.target);
         },
         _minuteChanged: function(minute) {
           minute = parseFloat(minute) % 60;
@@ -536,7 +536,7 @@ If you include this element as part of `paper-dialog`, use the class
         },
         _minutesInputFocus: function(ev) {
           this.$['iron-selector'].selected = "minutes";
-          this._selectAll(ev);
+          this._selectPaperInput(ev.target);
         },
         _secondChanged: function(second) {
           second = parseFloat(second) % 60;
@@ -569,7 +569,7 @@ If you include this element as part of `paper-dialog`, use the class
         },
         _secondsInputFocus: function(ev) {
           this.$['iron-selector'].selected = "seconds";
-          this._selectAll(ev);
+          this._selectPaperInput(ev.target);
         },
         _periodChanged: function(period) {
           if (isNaN(parseInt(this.hour)) || isNaN(parseInt(this.minute))) {
@@ -590,8 +590,8 @@ If you include this element as part of `paper-dialog`, use the class
         _twelveHour: function(hour) {
           return hour % 12 || 12;
         },
-        _selectAll: function(ev) {
-          ev.target.$.input.select();
+        _selectPaperInput: function(paperInput) {
+          paperInput.$.input.select();
         },
         _isEqual: function(a, b) {
           return a === b;
