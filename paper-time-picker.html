@@ -501,14 +501,14 @@ If you include this element as part of `paper-dialog`, use the class
         },
         _hoursInputValueChanged: function() {
           var value = this.$['hours-input'].value;
-          if (isNaN(value) || !value || value === 0 || value > 12) {
+          if (isNaN(value) || !value || value === '0') {
             return;
           }
-          this.hour12 = value;
+          this.hour = value;
         },
         _hoursInputBlur: function() {
           var value = this.$['hours-input'].value;
-          if (isNaN(value) || !value || value === 0 || value > 12) {
+          if (isNaN(value) || !value || value === '0' || value > 12) {
             this.$['hours-input'].value = this.hour12;
           }
         },
