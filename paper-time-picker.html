@@ -3,6 +3,7 @@
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../iron-selector/iron-selector.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../paper-input/paper-input.html">
 <link rel="import" href="../paper-styles/typography.html">
 <link rel="import" href="../neon-animation/neon-animated-pages.html">
 <link rel="import" href="../neon-animation/neon-animatable.html">
@@ -153,9 +154,31 @@ If you include this element as part of `paper-dialog`, use the class
         font-weight: 600;
         @apply(--paper-font-subhead);
       }
+      #heading .period .iron-selected {
+        font-weight: 900;
+      }
       #heading .time div,
       #heading .period div {
         cursor: pointer;
+      }
+      #heading .sep {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #heading paper-input {
+        --paper-input-container-color: var(--light-primary-color);
+        --paper-input-container-focus-color: var(--text-primary-color);
+        --paper-input-container-input-color: var(--light-primary-color);
+        --paper-input-container-input-focus: {
+          color: var(--text-primary-color);
+        }
+        --paper-input-container-input: {
+          @apply(--paper-font-display2);
+        }
+      }
+      #heading paper-input.iron-selected {
+        --paper-input-container-input-color: var(--text-primary-color);
       }
 
       /** Clock *********************/
@@ -181,14 +204,42 @@ If you include this element as part of `paper-dialog`, use the class
       query-matches="{{_queryMatches}}"></iron-media-query>
     <div id="timePicker">
       <div id="heading">
-        <iron-selector class="time" selectable="[name]" attr-for-selected="name" selected="{{view}}">
-          <div name="hours" class="hour">{{hour12}}</div>
+        <iron-selector id="iron-selector" class="time" selectable="[name]" attr-for-selected="name" selected="{{view}}">
+          <paper-input id="hours-input" 
+            name="hours" 
+            class="hour" 
+            maxlength="2" 
+            auto-validate 
+            allowed-pattern="[0-9]" 
+            no-label-float
+            on-input="_hoursInputValueChanged"
+            on-blur="_hoursInputBlur"
+            on-focus="_inputFocus">
+          </paper-input>
           <div class="sep">:</div>
-          <div name="minutes" class="minute">{{_zeroPad(minute, 2)}}</div>
-          <template is="dom-if" if="[[ enableSeconds ]]">
-            <div class="sep">:</div>
-            <div name="seconds" class="second">{{_zeroPad(second, 2)}}</div>
-          </template>
+          <paper-input id="minutes-input" 
+            name="minutes" class="minute" 
+            maxlength="2" 
+            auto-validate 
+            allowed-pattern="[0-9]" 
+            no-label-float
+            on-input="_minutesInputValueChanged"
+            on-blur="_minutesInputBlur"
+            on-focus="_inputFocus">
+          </paper-input>
+          <div class="sep" hidden$="[[!enableSeconds]]">:</div>
+          <paper-input id="seconds-input" 
+            name="seconds" 
+            class="second" 
+            maxlength="2" 
+            auto-validate 
+            allowed-pattern="[0-9]" 
+            no-label-float
+            hidden$="[[!enableSeconds]]"
+            on-input="_secondsInputValueChanged"
+            on-blur="_secondsInputBlur"
+            on-focus="_inputFocus">
+          </paper-input>
         </iron-selector>
         <iron-selector class="period" attr-for-selected="name" selected="{{period}}">
           <div name="AM">AM</div>
@@ -431,6 +482,7 @@ If you include this element as part of `paper-dialog`, use the class
         _hour12Changed: function(hour12) {
           var add = (this.period === 'PM' ? 12 : 0);
           this.hour = ((hour12 % 12) + add) % 24;
+          this.$['hours-input'].value = (hour12 === 0 ? 12 : hour12);
         },
         _hourChanged: function(hour, oldValue) {
           hour = parseInt(hour);
@@ -447,13 +499,58 @@ If you include this element as part of `paper-dialog`, use the class
           this.hour12 = this._twelveHour(hour);
           this.period = ['PM', 'AM'][+(hour < 12)];
         },
+        _hoursInputValueChanged: function() {
+          var value = this.$['hours-input'].value;
+          if (isNaN(value) || !value || value === '0') {
+            return;
+          }
+          this.hour = value;
+        },
+        _hoursInputBlur: function() {
+          var value = this.$['hours-input'].value;
+          if (isNaN(value) || !value || value === '0' || value > 12) {
+            this.$['hours-input'].value = this.hour12;
+          }
+        },
         _minuteChanged: function(minute) {
           minute = parseFloat(minute) % 60;
           this.minute = minute;
+          this.$['minutes-input'].value = this._zeroPad(minute, 2);
+        },
+        _minutesInputValueChanged: function(value) {
+          var value = this.$['minutes-input'].value;
+          if (isNaN(value) || !value || value.length < 2 || value > 59) {
+            return;
+          }
+          this.minute = value;  
+        },
+        _minutesInputBlur: function() {
+          var value = this.$['minutes-input'].value;
+          if (isNaN(value) || !value || value > 59) {
+            this.$['minutes-input'].value = this._zeroPad(this.minute, 2);
+            return;
+          }          
+          this.minute = value;
         },
         _secondChanged: function(second) {
           second = parseFloat(second) % 60;
           this.second = second;
+          this.$['seconds-input'].value = this._zeroPad(second, 2);
+        },
+        _secondsInputValueChanged: function(value) {
+          var value = this.$['seconds-input'].value;
+          if (isNaN(value) || !value || value.length < 2 || value > 59) {
+            return;
+          }
+          this.second = value;   
+        },
+        _secondsInputBlur: function() {
+          var value = this.$['seconds-input'].value;
+          if (isNaN(value) || !value || value > 59) {
+            this.$['seconds-input'].value = this._zeroPad(this.second, 2);
+            return;
+          }          
+          this.second = value;
         },
         _periodChanged: function(period) {
           if (isNaN(parseInt(this.hour)) || isNaN(parseInt(this.minute))) {
@@ -473,6 +570,10 @@ If you include this element as part of `paper-dialog`, use the class
         },
         _twelveHour: function(hour) {
           return hour % 12 || 12;
+        },
+        _inputFocus: function(ev) {
+          this.$['iron-selector'].selected = ev.target.name;
+          ev.target.$.input.select();
         },
         _isEqual: function(a, b) {
           return a === b;
