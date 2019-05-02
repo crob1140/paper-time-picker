@@ -32,7 +32,7 @@
     "webcomponents",
     "polymer",
     "timepicker",
-    "paper-time-picker"
+    "paper-simple-time-picker"
   ],
   "author": "Ben Davis <bendavis78@gmail.com>",
   "license": "MIT",

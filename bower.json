@@ -1,5 +1,5 @@
 {
-  "name": "paper-time-picker",
+  "name": "paper-simple-time-picker",
   "version": "1.2.1",
   "authors": [
     "Ben Davis <bendavis78@gmail.com>"
@@ -10,9 +10,9 @@
     "web-components",
     "polymer",
     "timepicker",
-    "paper-time-picker"
+    "paper-simple-time-picker"
   ],
-  "main": "paper-time-picker.html",
+  "main": "paper-simple-time-picker.html",
   "license": "MIT",
   "homepage": "http://bendavis78.github.io/paper-time-picker/",
   "ignore": [

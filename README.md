@@ -1,4 +1,4 @@
-paper-time-picker
+paper-simple-time-picker
 ==========
 Material Design time picker, compatible with *Polymer 1.0*
 
@@ -15,22 +15,22 @@ full documentation.
 Default picker:
 
 ```html
-<paper-time-picker></paper-time-picker>
+<paper-simple-time-picker></paper-simple-time-picker>
 ```
 
 Setting the initial time to 4:20pm (note that hours given as 24-hour):
 
 ```html
-<paper-time-picker time="4:20pm"></paper-time-picker>
+<paper-simple-time-picker time="4:20pm"></paper-simple-time-picker>
 ```
 
 If you include this element as part of `paper-dialog`, use the class
-`"paper-time-picker-dialog"` on the dialog in order to give it proper styling.
+`"paper-simple-time-picker-dialog"` on the dialog in order to give it proper styling.
 
 ```html
-<paper-dialog id="dialog" modal class="paper-time-picker-dialog"
+<paper-dialog id="dialog" modal class="paper-simple-time-picker-dialog"
   on-iron-overlay-closed="dismissDialog">
-  <paper-time-picker id="timePicker" time="[[time]]"></paper-time-picker>
+  <paper-simple-time-picker id="timePicker" time="[[time]]"></paper-simple-time-picker>
   <div class="buttons">
     <paper-button dialog-dismiss>Cancel</paper-button>
     <paper-button dialog-confirm>OK</paper-button>

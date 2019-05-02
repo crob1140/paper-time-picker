@@ -10,7 +10,7 @@
 <link rel="import" href="../neon-animation/animations/fade-in-animation.html">
 <link rel="import" href="../neon-animation/animations/fade-out-animation.html">
 <link rel="import" href="paper-clock-selector.html">
-<link rel="import" href="paper-time-picker-dialog-style.html">
+<link rel="import" href="paper-simple-time-picker-dialog-style.html">
 
 <!--
 
@@ -23,35 +23,35 @@ component aims to be a clone of the time picker introduced in Android Lollipop.
 
 Default picker:
 
-    <paper-time-picker></paper-time-picker>
+    <paper-simple-time-picker></paper-simple-time-picker>
 
 Setting the initial time to 4:20pm (note that hours given as 24-hour):
 
-    <paper-time-picker time="4:20pm"></paper-time-picker>
+    <paper-simple-time-picker time="4:20pm"></paper-simple-time-picker>
 
 If you include this element as part of `paper-dialog`, use the class
-`"paper-time-picker-dialog"` on the dialog in order to give it proper styling.
+`"paper-simple-time-picker-dialog"` on the dialog in order to give it proper styling.
 
-    <paper-dialog id="dialog" modal class="paper-time-picker-dialog"
+    <paper-dialog id="dialog" modal class="paper-simple-time-picker-dialog"
       on-iron-overlay-closed="dismissDialog">
-      <paper-time-picker id="timePicker" time="[[time]]"></paper-time-picker>
+      <paper-simple-time-picker id="timePicker" time="[[time]]"></paper-simple-time-picker>
       <div class="buttons">
         <paper-button dialog-dismiss>Cancel</paper-button>
         <paper-button dialog-confirm>OK</paper-button>
       </div>
     </paper-dialog>
 
-@element paper-time-picker
+@element paper-simple-time-picker
 @blurb Provides a responsive time picker based on the material design spec.
 @homepage http://bendavis78.github.io/paper-time-picker/
 @demo demo/index.html
 -->
 
-<style is="custom-style" include="paper-time-picker-dialog-style">
+<style is="custom-style" include="paper-simple-time-picker-dialog-style">
   /* include dialog style at document-level for backward compatibility */
 </style>
 
-<dom-module id="paper-time-picker">
+<dom-module id="paper-simple-time-picker">
   <template>
     <style>
       :host * {
@@ -76,13 +76,13 @@ If you include this element as part of `paper-dialog`, use the class
         width: 512px;
         height: 304px;
         @apply(--layout-horizontal);
-        @apply(--paper-time-picker);
+        @apply(--paper-simple-time-picker);
       }
       #heading {
         width: 168px;
         padding: 16px;
         @apply(--layout-vertical);
-        @apply(--paper-time-picker-heading);
+        @apply(--paper-simple-time-picker-heading);
       }
       :host([enable-seconds]) #heading {
         width: 200px;
@@ -122,7 +122,7 @@ If you include this element as part of `paper-dialog`, use the class
       :host([narrow]) #clockArea {
         /* padding: 30px 20px 10px 20px; */
         padding: 16px;
-        @apply(--paper-time-picker-clock);
+        @apply(--paper-simple-time-picker-clock);
       }
 
       /** Heading ********************/
@@ -186,7 +186,7 @@ If you include this element as part of `paper-dialog`, use the class
         background: var(--default-background-color);
         overflow: hidden;
         @apply(--layout-flex);
-        @apply(--paper-time-picker-clock);
+        @apply(--paper-simple-time-picker-clock);
         @apply(--layout-vertical);
       }
       #clockArea > div {
@@ -278,7 +278,7 @@ If you include this element as part of `paper-dialog`, use the class
       }
 
       Polymer({
-        is: 'paper-time-picker',
+        is: 'paper-simple-time-picker',
         properties: {
           /**
            * The selected time
