@@ -9,7 +9,6 @@
 <link rel="import" href="../neon-animation/neon-animatable.html">
 <link rel="import" href="../neon-animation/animations/fade-in-animation.html">
 <link rel="import" href="../neon-animation/animations/fade-out-animation.html">
-<link rel="import" href="paper-clock-selector.html">
 <link rel="import" href="paper-simple-time-picker-dialog-style.html">
 
 <!--
@@ -73,13 +72,10 @@ If you include this element as part of `paper-dialog`, use the class
 
       /** Landscape ******************/
       #timePicker {
-        width: 512px;
-        height: 304px;
         @apply(--layout-horizontal);
         @apply(--paper-simple-time-picker);
       }
       #heading {
-        width: 168px;
         padding: 16px;
         @apply(--layout-vertical);
         @apply(--paper-simple-time-picker-heading);
@@ -87,7 +83,7 @@ If you include this element as part of `paper-dialog`, use the class
       :host([enable-seconds]) #heading {
         width: 200px;
       }
-      #clockArea {
+      #timeSelectionArea {
         padding: 20px;
       }
 
@@ -119,10 +115,10 @@ If you include this element as part of `paper-dialog`, use the class
         margin-left: 12px;
         margin-top: 12px;
       }
-      :host([narrow]) #clockArea {
+      :host([narrow]) #timeSelectionArea {
         /* padding: 30px 20px 10px 20px; */
         padding: 16px;
-        @apply(--paper-simple-time-picker-clock);
+        @apply(--paper-simple-time-picker-time-selection-area);
       }
 
       /** Heading ********************/
@@ -181,91 +177,63 @@ If you include this element as part of `paper-dialog`, use the class
         --paper-input-container-input-color: var(--text-primary-color);
       }
 
-      /** Clock *********************/
-      #clockArea {
+      /** time-selection-area *********************/
+      #timeSelectionArea {
         background: var(--default-background-color);
         overflow: hidden;
         @apply(--layout-flex);
-        @apply(--paper-simple-time-picker-clock);
+        @apply(--paper-simple-time-picker-time-selection-area);
         @apply(--layout-vertical);
       }
-      #clockArea > div {
+      #timeSelectionArea > div {
         @apply(--layout-flex);
         position: relative;
-      }
-      .clock {
-        @apply(--layout-fit);
-      }
-      .clock-animatable{
-        @apply(--layout-fit);
       }
     </style>
     <iron-media-query query="{{_getMediaQuery(forceNarrow, responsiveWidth)}}" 
       query-matches="{{_queryMatches}}"></iron-media-query>
     <div id="timePicker">
       <div id="heading">
-        <iron-selector id="iron-selector" class="time" selectable="[name]" attr-for-selected="name" selected="{{view}}">
-          <paper-input id="hours-input" 
-            name="hours" 
-            class="hour" 
-            maxlength="2" 
-            auto-validate 
-            allowed-pattern="[0-9]" 
-            no-label-float
-            on-input="_hoursInputValueChanged"
-            on-blur="_hoursInputBlur"
-            on-focus="_inputFocus">
-          </paper-input>
-          <div class="sep">:</div>
-          <paper-input id="minutes-input" 
-            name="minutes" class="minute" 
-            maxlength="2" 
-            auto-validate 
-            allowed-pattern="[0-9]" 
-            no-label-float
-            on-input="_minutesInputValueChanged"
-            on-blur="_minutesInputBlur"
-            on-focus="_inputFocus">
-          </paper-input>
-          <div class="sep" hidden$="[[!enableSeconds]]">:</div>
-          <paper-input id="seconds-input" 
-            name="seconds" 
-            class="second" 
-            maxlength="2" 
-            auto-validate 
-            allowed-pattern="[0-9]" 
-            no-label-float
-            hidden$="[[!enableSeconds]]"
-            on-input="_secondsInputValueChanged"
-            on-blur="_secondsInputBlur"
-            on-focus="_inputFocus">
-          </paper-input>
-        </iron-selector>
-        <iron-selector class="period" attr-for-selected="name" selected="{{period}}">
-          <div name="AM">AM</div>
-          <div name="PM">PM</div>
-        </iron-selector>
+        <!-- Empty heading for the colored bar -->
       </div>
-      <div id="clockArea">
-        <div>
-          <neon-animated-pages id="pages" class="clock-animatable" attr-for-selected="name" selected="{{view}}"
-            entry-animation="fade-in-animation" exit-animation="fade-out-animation">
-            <neon-animatable class="clock-animatable" name="hours">
-              <paper-clock-selector class="clock" id="hourClock" count="12" step="1"
-                animated="[[animated]]" selected="{{hour12}}"></paper-clock-selector> 
-            </neon-animatable>
-            <neon-animatable class="clock-animatable" name="minutes">
-              <paper-clock-selector class="clock" id="minuteClock" count="60" step="5"
-                animated="[[animated]]" use-zero zero-pad selected="{{minute}}"></paper-clock-selector> 
-            </neon-animatable>
-            <template is="dom-if" if="[[ enableSeconds ]]">
-              <neon-animatable class="clock-animatable" name="seconds">
-                <paper-clock-selector class="clock" id="secondClock" count="60" step="5"
-                  animated="[[animated]]" use-zero zero-pad selected="{{second}}"></paper-clock-selector> 
-              </neon-animatable>
-            </template>
-          </neon-animated-pages>
-        </div>
+      <div id="timeSelectionArea">
+          <iron-selector id="iron-selector" class="time" selectable="[name]" attr-for-selected="name" selected="{{view}}">
+              <paper-input id="hours-input" 
+                name="hours" 
+                class="hour" 
+                maxlength="2" 
+                auto-validate 
+                allowed-pattern="[0-9]" 
+                no-label-float
+                on-input="_hoursInputValueChanged"
+                on-blur="_hoursInputBlur"
+                on-focus="_inputFocus">
+              </paper-input>
+              <span class="sep">:</span>
+              <paper-input id="minutes-input" 
+                name="minutes" class="minute" 
+                maxlength="2" 
+                auto-validate 
+                allowed-pattern="[0-9]" 
+                no-label-float
+                on-input="_minutesInputValueChanged"
+                on-blur="_minutesInputBlur"
+                on-focus="_inputFocus">
+              </paper-input>
+              <span class="sep" hidden$="[[!enableSeconds]]">:</span>
+              <paper-input id="seconds-input" 
+                name="seconds" 
+                class="second" 
+                maxlength="2" 
+                auto-validate 
+                allowed-pattern="[0-9]" 
+                no-label-float
+                hidden$="[[!enableSeconds]]"
+                on-input="_secondsInputValueChanged"
+                on-blur="_secondsInputBlur"
+                on-focus="_inputFocus">
+              </paper-input>
+            </iron-selector>
       </div>
     </div>
   </template>
@@ -343,15 +311,6 @@ If you include this element as part of `paper-dialog`, use the class
             value: 'AM'
           },
           /**
-           * The current selector view ('hours' or 'minutes')
-           */
-          view: {
-            type: String,
-            notify: true,
-            value: 'hours',
-            observer: '_viewChanged'
-          },
-          /**
            * Maximum screen width at which the picker uses a vertical layout
            */
           responsiveWidth: {
@@ -362,13 +321,6 @@ If you include this element as part of `paper-dialog`, use the class
            * Force narrow layout
            */
           forceNarrow: {
-            type: Boolean,
-            value: false
-          },
-          /**
-           * Whether or not to animate the clock hand between selections
-           */
-          animated: {
             type: Boolean,
             value: false
           },
@@ -401,7 +353,6 @@ If you include this element as part of `paper-dialog`, use the class
         ],
         listeners: {
           'iron-resize': '_resizeHandler',
-          'paper-clock-selected': '_onClockSelected'
         },
         ready: function() {
           this.isTouch = 'ontouchstart' in window;
@@ -584,82 +535,6 @@ If you include this element as part of `paper-dialog`, use the class
         _computeNarrow: function() {
           this.set('narrow', this._queryMatches || this.forceNarrow);
         },
-        _viewChanged: function(toView, fromView) {
-          this.$.pages._notifyPageResize();
-
-          // prevent the clock-hand transition when selecting, otherwise the 
-          // extra movement would be confusing
-          if (this._selecting || !fromView || !toView || !this.animated) {
-            return;
-          }
-
-          var clocks = {'hours': this.$.hourClock, 'minutes': this.$.minuteClock, 'seconds': this.$.secondClock};
-          var from = clocks[fromView];
-          var to = clocks[toView];
-          var fromAngle = (360 / from.count) * from.selected;
-          var toAngle = (360 / to.count) * to.selected;
-
-          // transition both clock hands at the same time
-          to.setClockHand(fromAngle, false);
-          from.setClockHand(toAngle);
-
-          this.async(function() {
-            to.setClockHand(toAngle, true, function() {
-              this.async(function() {
-                from.setClockHand(fromAngle, false);
-              }, 200);
-            }.bind(this));
-          }.bind(this));
-        },
-        _onClockSelected: function(event) {
-          if (this.view === 'hours') {
-
-            var showMinutes = function() {
-              this.async(function() {
-                this._selecting = true;
-                this.view = 'minutes';
-                this._selecting = false;
-              }.bind(this), 100);
-              this.$.hourClock.removeEventListener('paper-clock-transition-end', showMinutes);
-            }.bind(this);
-
-            if (event.detail.animated) {
-              this.$.hourClock.addEventListener('paper-clock-transition-end', showMinutes);
-            } else {
-              showMinutes();
-            }
-
-            if (this.hour12 !== event.detail.value) {
-              this.hour12 = event.detail.value;
-            } else {
-              // show minutes if same hour is selected
-              showMinutes();
-            }
-          } else if (this.view === 'minutes' && this.enableSeconds) {
-
-            var showSeconds = function() {
-              this.async(function() {
-                this._selecting = true;
-                this.view = 'seconds';
-                this._selecting = false;
-              }.bind(this), 100);
-              this.$.minuteClock.removeEventListener('paper-clock-transition-end', showSeconds);
-            }.bind(this);
-
-            if (event.detail.animated) {
-              this.$.minuteClock.addEventListener('paper-clock-transition-end', showSeconds);
-            } else {
-              showSeconds();
-            }
-
-            if (this.minute !== event.detail.value) {
-              this.minute = event.detail.value;
-            } else {
-              // show seconds if same minute is selected
-              showSeconds();
-            }
-          }
-        },
         _resizeHandler: function() {
           if (!this.offsetWidth || this._resizing) {
             return;
@@ -667,7 +542,6 @@ If you include this element as part of `paper-dialog`, use the class
           this.updateStyles();
           this.async(function() {
             this._resizing = true;
-            this.$.pages._notifyPageResize();
             this._resizing = false;
           }.bind(this));
         }
