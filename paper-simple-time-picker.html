@@ -5,7 +5,6 @@
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../paper-input/paper-input.html">
 <link rel="import" href="../paper-styles/typography.html">
-<link rel="import" href="../neon-animation/neon-animated-pages.html">
 <link rel="import" href="../neon-animation/neon-animatable.html">
 <link rel="import" href="../neon-animation/animations/fade-in-animation.html">
 <link rel="import" href="../neon-animation/animations/fade-out-animation.html">
@@ -70,99 +69,54 @@ If you include this element as part of `paper-dialog`, use the class
         font-size: 14px;
       }
 
-      /** Landscape ******************/
       #timePicker {
-        @apply(--layout-horizontal);
-        @apply(--paper-simple-time-picker);
-      }
-      #heading {
-        padding: 16px;
-        @apply(--layout-vertical);
-        @apply(--paper-simple-time-picker-heading);
-      }
-      :host([enable-seconds]) #heading {
-        width: 200px;
-      }
-      #timeSelectionArea {
-        padding: 20px;
+        display: flex;
       }
 
-      /** Narrow *********************/
-      :host([narrow]) #timePicker {
-        width: 328px;
-        height: 428px;
-        @apply(--layout-vertical);
-      }
-      :host([narrow]) #heading {
-        width: auto;
-        height: 96px;
-        padding: 0 48px;
-        @apply(--layout-horizontal);
-        @apply(--layout-end-justified);
-      }
-      :host([enable-seconds][narrow]) #heading {
-        padding: 0 16px;
-      }
-      :host([narrow]) #heading .time {
-        margin-top: 6px;
-        @apply(--paper-font-display3);
-      }
-      :host([narrow]) #timePicker #heading .time {
-        font-size: 60px;
-        letter-spacing: .1ex !important;
-      }
-      :host([narrow]) #heading .period {
-        margin-left: 12px;
-        margin-top: 12px;
-      }
-      :host([narrow]) #timeSelectionArea {
-        /* padding: 30px 20px 10px 20px; */
-        padding: 16px;
-        @apply(--paper-simple-time-picker-time-selection-area);
-      }
-
-      /** Heading ********************/
-      #heading {
+      /** Left Border ****************/
+      #left-border {
         box-sizing: border-box;
-        color: var(--light-primary-color); 
+        width: 30px;
         background: var(--default-primary-color);
         @apply(--layout-vertical);
         @apply(--layout-center-center);
       }
-      #heading > iron-selector {
+
+      /** Content ********************/
+      #content > iron-selector {
         margin-top: 10px;
       }
-      #heading .time {
+      #content .time {
         @apply(--paper-font-display2);
         @apply(--layout-horizontal);
         @apply(--layout-end-justified);
         width: 5.34ex;
         letter-spacing: .13ex !important;
       }
-      :host([enable-seconds]) #heading .time{
+      :host([enable-seconds]) #content .time{
         width: 8.5ex;
         font-size: 40px;
       }
-      #heading .iron-selected {
+      #content .iron-selected {
         color: var(--text-primary-color);
       }
-      #heading .period {
+      #content .period {
         font-weight: 600;
         @apply(--paper-font-subhead);
       }
-      #heading .period .iron-selected {
+      #content .period .iron-selected {
         font-weight: 900;
       }
-      #heading .time div,
-      #heading .period div {
+      #content .time div,
+      #content .period div {
         cursor: pointer;
       }
-      #heading .sep {
+      #content .sep {
         display: flex;
         align-items: center;
         justify-content: center;
       }
-      #heading paper-input {
+      #content paper-input {
         --paper-input-container-color: var(--light-primary-color);
         --paper-input-container-focus-color: var(--text-primary-color);
         --paper-input-container-input-color: var(--light-primary-color);
@@ -173,67 +127,55 @@ If you include this element as part of `paper-dialog`, use the class
           @apply(--paper-font-display2);
         }
       }
-      #heading paper-input.iron-selected {
+      #content paper-input.iron-selected {
         --paper-input-container-input-color: var(--text-primary-color);
       }
 
-      /** time-selection-area *********************/
-      #timeSelectionArea {
-        background: var(--default-background-color);
-        overflow: hidden;
-        @apply(--layout-flex);
-        @apply(--paper-simple-time-picker-time-selection-area);
-        @apply(--layout-vertical);
-      }
-      #timeSelectionArea > div {
-        @apply(--layout-flex);
-        position: relative;
-      }
     </style>
     <iron-media-query query="{{_getMediaQuery(forceNarrow, responsiveWidth)}}" 
       query-matches="{{_queryMatches}}"></iron-media-query>
     <div id="timePicker">
-      <div id="heading">
-        <!-- Empty heading for the colored bar -->
+      <div id="left-border">
+        <!-- Empty left-border for the colored bar -->
       </div>
-      <div id="timeSelectionArea">
-          <iron-selector id="iron-selector" class="time" selectable="[name]" attr-for-selected="name" selected="{{view}}">
-              <paper-input id="hours-input" 
-                name="hours" 
-                class="hour" 
-                maxlength="2" 
-                auto-validate 
-                allowed-pattern="[0-9]" 
-                no-label-float
-                on-input="_hoursInputValueChanged"
-                on-blur="_hoursInputBlur"
-                on-focus="_inputFocus">
-              </paper-input>
-              <span class="sep">:</span>
-              <paper-input id="minutes-input" 
-                name="minutes" class="minute" 
-                maxlength="2" 
-                auto-validate 
-                allowed-pattern="[0-9]" 
-                no-label-float
-                on-input="_minutesInputValueChanged"
-                on-blur="_minutesInputBlur"
-                on-focus="_inputFocus">
-              </paper-input>
-              <span class="sep" hidden$="[[!enableSeconds]]">:</span>
-              <paper-input id="seconds-input" 
-                name="seconds" 
-                class="second" 
-                maxlength="2" 
-                auto-validate 
-                allowed-pattern="[0-9]" 
-                no-label-float
-                hidden$="[[!enableSeconds]]"
-                on-input="_secondsInputValueChanged"
-                on-blur="_secondsInputBlur"
-                on-focus="_inputFocus">
-              </paper-input>
-            </iron-selector>
+      <div id="content">
+        <iron-selector id="iron-selector" class="time" selectable="[name]" attr-for-selected="name">
+          <paper-input id="hours-input" 
+            name="hours" 
+            class="hour" 
+            maxlength="2" 
+            auto-validate 
+            allowed-pattern="[0-9]" 
+            no-label-float
+            on-input="_hoursInputValueChanged"
+            on-blur="_hoursInputBlur"
+            on-focus="_inputFocus">
+          </paper-input>
+          <div class="sep">:</div>
+          <paper-input id="minutes-input" 
+            name="minutes" class="minute" 
+            maxlength="2" 
+            auto-validate 
+            allowed-pattern="[0-9]" 
+            no-label-float
+            on-input="_minutesInputValueChanged"
+            on-blur="_minutesInputBlur"
+            on-focus="_inputFocus">
+          </paper-input>
+          <div class="sep" hidden$="[[!enableSeconds]]">:</div>
+          <paper-input id="seconds-input" 
+            name="seconds" 
+            class="second" 
+            maxlength="2" 
+            auto-validate 
+            allowed-pattern="[0-9]" 
+            no-label-float
+            hidden$="[[!enableSeconds]]"
+            on-input="_secondsInputValueChanged"
+            on-blur="_secondsInputBlur"
+            on-focus="_inputFocus">
+          </paper-input>
+        </iron-selector>
       </div>
     </div>
   </template>
@@ -324,12 +266,6 @@ If you include this element as part of `paper-dialog`, use the class
             type: Boolean,
             value: false
           },
-          narrow: {
-            type: Boolean,
-            reflectToAttribute: true,
-            value: false,
-            notify: true,
-          },
           isTouch: {
             type: Boolean,
             value: false,
@@ -351,12 +287,8 @@ If you include this element as part of `paper-dialog`, use the class
         observers: [
           '_updateTime(hour, minute, second)'
         ],
-        listeners: {
-          'iron-resize': '_resizeHandler',
-        },
         ready: function() {
           this.isTouch = 'ontouchstart' in window;
-          this.view = 'hours';
         },
         _timeChanged: function(time) {
           if (!time) {
@@ -534,16 +466,6 @@ If you include this element as part of `paper-dialog`, use the class
         },
         _computeNarrow: function() {
           this.set('narrow', this._queryMatches || this.forceNarrow);
-        },
-        _resizeHandler: function() {
-          if (!this.offsetWidth || this._resizing) {
-            return;
-          }
-          this.updateStyles();
-          this.async(function() {
-            this._resizing = true;
-            this._resizing = false;
-          }.bind(this));
         }
       });
     })();
