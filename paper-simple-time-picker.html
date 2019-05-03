@@ -174,6 +174,10 @@ If you include this element as part of `paper-dialog`, use the class
             on-blur="_secondsInputBlur"
             on-focus="_inputFocus">
           </paper-input>
+          <!-- autocompletes here to not cover any time options -->
+          <paper-autocomplete-suggestions id="autocomplete-hours" for="hours-input" source="[[_getHoursList()]]" min-length=0 show-results-on-focus="true"></paper-autocomplete-suggestions>
+          <paper-autocomplete-suggestions id="autocomplete-minutes" for="minutes-input" source="[[_getMinutesList()]]" min-length=0 show-results-on-focus="true"></paper-autocomplete-suggestions>
+          <paper-autocomplete-suggestions id="autocomplete-seconds" for="seconds-input" source="[[_getMinutesList()]]" min-length=0 show-results-on-focus="true"></paper-autocomplete-suggestions>
         </iron-selector>
       </div>
     </div>
@@ -288,6 +292,40 @@ If you include this element as part of `paper-dialog`, use the class
         ],
         ready: function() {
           this.isTouch = 'ontouchstart' in window;
+
+          // Override default queryFn with our custom. Only works when done in ready due to possible race condition in the library maybe¯\_(ツ)_/¯
+          this.$$('#autocomplete-hours').queryFn = this._returnAllResults;
+          this.$$('#autocomplete-minutes').queryFn = this._returnAllResults;
+          this.$$('#autocomplete-seconds').queryFn = this._returnAllResults;
+        },
+        _returnAllResults: function (datasource, query) {
+          // Must deep copy or it fails to re-open
+          var results = [];
+          datasource.forEach(function (item) {
+            var copyItem = { text: item.text, value: item.value };
+            results.push(copyItem);
+          })
+          return results;
+        },
+        _getHoursList: function () {
+          var hoursList = [];
+          for (var i = 0; i < 24; i++) {
+            // Note - Strings must be used with these "values", as the autocomplete tries to get a "length" of your value.
+            // I.e. Number values have no "length" property and will thus fail to produce a suggestion.
+            var x = ("" + i);
+            hoursList.push({ "text": x, "value": x });
+          }
+          return hoursList;
+        },
+        _getMinutesList: function () {
+          var hoursList = [];
+          for (var i = 0; i < 60; i++) {
+            // Note - Strings must be used with these "values", as the autocomplete tries to get a "length" of your value.
+            // I.e. Number values have no "length" property and will thus fail to produce a suggestion.
+            var x = this._zeroPad(i, 2);
+            hoursList.push({ "text": x, "value": x });
+          }
+          return hoursList;
         },
         _timeChanged: function(time) {
           if (!time) {
