@@ -29,7 +29,8 @@
     "paper-styles": "PolymerElements/paper-styles#^1.0.0",
     "paper-input": "PolymerElements/paper-input#^1.0.0",
     "iron-pages": "PolymerElements/iron-pages#^1.0.0",
-    "classList.js": "https://github.com/eligrey/classList.js.git#~1.1.20150312"
+    "classList.js": "https://github.com/eligrey/classList.js.git#~1.1.20150312",
+    "paper-autocomplete": "^3.7.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
@@ -38,6 +39,13 @@
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
   },
   "resolutions": {
-    "webcomponentsjs": "^0.7.2"
+    "webcomponentsjs": "^0.7.2",
+    "iron-flex-layout": "^2.0.0",
+    "paper-input": "^2.0.0",
+    "paper-ripple": "^2.0.0",
+    "paper-material": "^2.0.0",
+    "iron-icons": "^2.0.0",
+    "iron-icon": "^2.0.0",
+    "iron-iconset-svg": "^2.0.0"
   }
 }
