@@ -223,6 +223,7 @@ If you include this element as part of `paper-dialog`, use the class
           Polymer.IronResizableBehavior
         ],
         observers: [
+          '_updateTime(hour, minute, second)'
         ],
         ready: function() {
           // Override default queryFn with our custom. Only works when done in ready due to possible race condition in the library maybe¯\_(ツ)_/¯
@@ -238,6 +239,9 @@ If you include this element as part of `paper-dialog`, use the class
             results.push(copyItem);
           })
           return results;
+        },
+        _updateTime: function () {
+          this.time = this._formatTime(this.hour, this.minute, this.second);
         },
         _getHoursList: function () {
           var hoursList = [];
@@ -265,7 +269,7 @@ If you include this element as part of `paper-dialog`, use the class
             return;
           }
           var parsed = this.parseTimeWithPeriod(time);
-          var cleanedTime = this.formatTime(parsed.hour, parsed.minute, parsed.second);
+          var cleanedTime = this._formatTime(parsed.hour, parsed.minute, parsed.second);
           this._setTimeObjects(parsed.hour, parsed.minute, parsed.second);
         },
         _setTimeObjects:function(hour,min,sec){
@@ -275,7 +279,7 @@ If you include this element as part of `paper-dialog`, use the class
             this.second = sec;
           }
         },
-        formatTime: function(hour, minute, second) {
+        _formatTime: function(hour, minute, second) {
           minute = ('0' + minute).substr(-2);
           second = ('0' + second).substr(-2);
           if (this.enableSeconds) {
