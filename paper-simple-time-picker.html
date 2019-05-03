@@ -224,6 +224,13 @@ If you include this element as part of `paper-dialog`, use the class
           timeInterval: {
             type: Number,
             value: 5
+          },
+          /**
+           * Use a 12-Hour clock and show AM or PM in the output time
+           */
+          use12HourClock: {
+            type: Boolean,
+            value: false
           }
         },
         behaviors: [
@@ -318,7 +325,21 @@ If you include this element as part of `paper-dialog`, use the class
           if (this.enableSeconds) {
             minute += ':' + second;
           }
-          return hour + ':' + minute;
+          var period = "";
+          if (this.use12HourClock) {
+            if (hour === 0) {
+              hour = 12;
+              period = "AM";
+            } else if (hour === 12) {
+              period = "PM";
+            } else if (hour > 12) {
+              hour = hour - 12;
+              period = "PM";
+            } else {
+              period = "AM";
+            }
+          } 
+          return hour + ':' + minute + " " + period;
         },
         _parseTimeWithPeriod: function(timeString) {
           var pattern = /^\s*(\d{1,2}):?(\d{2})(:?(\d{2}))?(\s*([AaPp])\.?[Mm]\.?|[A-Z])?\s*$/;
@@ -355,9 +376,13 @@ If you include this element as part of `paper-dialog`, use the class
           this.hour = hour;
           this.$['hours-input'].value = "" + hour;
         },
-        _hoursInputValueChanged: function() {
+        _hoursInputValueChanged: function () {
           var value = this.$['hours-input'].value;
-          if (isNaN(value) || !value || value === '0' || value > 24) {
+          if (value > 24) {
+            value = value - (parseInt(value / 24) * 24);
+            this.$['hours-input'].value = value;
+          }
+          if (isNaN(value) || !value || value < 0) {
             return;
           }
           this.hour = value;
