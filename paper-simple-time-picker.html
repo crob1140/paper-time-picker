@@ -131,8 +131,6 @@ If you include this element as part of `paper-dialog`, use the class
       }
 
     </style>
-    <iron-media-query query="{{_getMediaQuery(forceNarrow, responsiveWidth)}}" 
-      query-matches="{{_queryMatches}}"></iron-media-query>
     <div id="timePicker">
       <div id="left-border">
         <!-- Empty left-border for the colored bar -->
@@ -497,9 +495,6 @@ If you include this element as part of `paper-dialog`, use the class
         },
         _isEqual: function(a, b) {
           return a === b;
-        },
-        _getMediaQuery: function(forceNarrow, responsiveWidth) {
-          return '(max-width: ' + (forceNarrow ? '' : responsiveWidth) + ')';
         },
         _computeNarrow: function() {
           this.set('narrow', this._queryMatches || this.forceNarrow);
