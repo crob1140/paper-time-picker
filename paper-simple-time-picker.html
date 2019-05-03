@@ -226,10 +226,29 @@ If you include this element as part of `paper-dialog`, use the class
           '_updateTime(hour, minute, second)'
         ],
         ready: function() {
+          var autocompleteHours = this.$$('#autocomplete-hours'); 
+          var autocompleteMinutes = this.$$('#autocomplete-minutes');
+          var autocompleteSeconds = this.$$('#autocomplete-seconds');
+
           // Override default queryFn with our custom. Only works when done in ready due to possible race condition in the library maybe¯\_(ツ)_/¯
-          this.$$('#autocomplete-hours').queryFn = this._returnAllResults;
-          this.$$('#autocomplete-minutes').queryFn = this._returnAllResults;
-          this.$$('#autocomplete-seconds').queryFn = this._returnAllResults;
+          autocompleteHours.queryFn = this._returnAllResults;
+          autocompleteMinutes.queryFn = this._returnAllResults;
+          autocompleteSeconds.queryFn = this._returnAllResults;
+
+          // Set autocomplete-select event, as normally it doesn't do anything if you click an autocomplete item 
+          // (it """updates""" the input, but doesn't update any values, doesn't trigger any events and therefore does not cause any observers to fire...)
+          autocompleteHours.addEventListener('autocomplete-selected', this._onHourSelected.bind(this));
+          autocompleteMinutes.addEventListener('autocomplete-selected', this._onMinuteSelected.bind(this));
+          autocompleteSeconds.addEventListener('autocomplete-selected', this._onSecondSelected.bind(this));
+        },
+        _onHourSelected: function(event){
+          this.hour = parseInt(event.detail.text);
+        },
+        _onMinuteSelected: function(event){
+          this.minute = parseInt(event.detail.text);
+        },
+        _onSecondSelected: function(event){
+          this.second = parseInt(event.detail.text);        
         },
         _returnAllResults: function (datasource, query) {
           // Must deep copy or it fails to re-open
