@@ -267,11 +267,6 @@ If you include this element as part of `paper-dialog`, use the class
             type: Boolean,
             value: false
           },
-          isTouch: {
-            type: Boolean,
-            value: false,
-            reflectToAttribute: true
-          },
           enableSeconds: {
             type: Boolean,
             value: false
@@ -289,8 +284,6 @@ If you include this element as part of `paper-dialog`, use the class
           '_updateTime(hour, minute, second)'
         ],
         ready: function() {
-          this.isTouch = 'ontouchstart' in window;
-
           // Override default queryFn with our custom. Only works when done in ready due to possible race condition in the library maybe¯\_(ツ)_/¯
           this.$$('#autocomplete-hours').queryFn = this._returnAllResults;
           this.$$('#autocomplete-minutes').queryFn = this._returnAllResults;
