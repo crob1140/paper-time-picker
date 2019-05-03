@@ -333,9 +333,13 @@ If you include this element as part of `paper-dialog`, use the class
             this.hour = oldValue;
             return;
           }
-          hour = parseFloat(hour) % 24;
+          // To handle 24 and above (even though input limited prevents over 24hr anyway)
+          var numberOf24s = parseInt(hour / 24);
+          var hoursToSubtract = numberOf24s * 24;
+          hour = hour - (hoursToSubtract);
+
           this.hour = hour;
-          this.$['hours-input'].value = ""+hour;
+          this.$['hours-input'].value = "" + hour;
         },
         _hoursInputValueChanged: function() {
           var value = this.$['hours-input'].value;
