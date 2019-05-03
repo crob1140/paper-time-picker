@@ -101,17 +101,7 @@ If you include this element as part of `paper-dialog`, use the class
       #content .iron-selected {
         color: var(--text-primary-color);
       }
-      #content .period {
-        font-weight: 600;
-        @apply(--paper-font-subhead);
-      }
-      #content .period .iron-selected {
-        font-weight: 900;
-      }
       #content .time div,
-      #content .period div {
-        cursor: pointer;
-      }
       #content .sep {
         display: flex;
         align-items: center;
@@ -145,7 +135,6 @@ If you include this element as part of `paper-dialog`, use the class
             allowed-pattern="[0-9]" 
             no-label-float
             on-input="_hoursInputValueChanged"
-            on-blur="_hoursInputBlur"
             on-focus="_inputFocus">
           </paper-input>
           <div class="sep">:</div>
@@ -156,7 +145,6 @@ If you include this element as part of `paper-dialog`, use the class
             allowed-pattern="[0-9]" 
             no-label-float
             on-input="_minutesInputValueChanged"
-            on-blur="_minutesInputBlur"
             on-focus="_inputFocus">
           </paper-input>
           <div class="sep" hidden$="[[!enableSeconds]]">:</div>
@@ -169,7 +157,6 @@ If you include this element as part of `paper-dialog`, use the class
             no-label-float
             hidden$="[[!enableSeconds]]"
             on-input="_secondsInputValueChanged"
-            on-blur="_secondsInputBlur"
             on-focus="_inputFocus">
           </paper-input>
           <!-- autocompletes here to not cover any time options -->
@@ -198,16 +185,7 @@ If you include this element as part of `paper-dialog`, use the class
             type: String,
             value: '00:00',
             notify: true,
-            observer: '_timeChanged' 
-          },
-          /**
-           * The time value as the number of minutes(if enableSeconds then number of seconds) from midnight
-           */
-          rawValue: {
-            type: Number,
-            value: 0,
-            notify: true,
-            observer: '_rawValueChanged'
+            observer: '_timeChanged'
           },
           /**
            * The current 24-hour value (0-24)
@@ -217,14 +195,6 @@ If you include this element as part of `paper-dialog`, use the class
             observer: '_hourChanged',
             notify: true,
             value: 0
-          },
-          /**
-           * The current 12-hour value (0-12)
-           */
-          hour12: {
-            type: Number,
-            notify: true,
-            observer: '_hour12Changed'
           },
           /**
            * The current minute (0-59)
@@ -238,50 +208,21 @@ If you include this element as part of `paper-dialog`, use the class
           /**
            * The current second (0-59)
            */
-           second: {
+          second: {
             type: Number,
             notify: true,
             observer: '_secondChanged',
             value: 0
           },
-          /**
-           * The current period ('AM', 'PM')
-           */
-          period: {
-            type: String,
-            notify: true,
-            observer: '_periodChanged',
-            value: 'AM'
-          },
-          /**
-           * Maximum screen width at which the picker uses a vertical layout
-           */
-          responsiveWidth: {
-            type: String,
-            value: '560px'
-          },
-          /**
-           * Force narrow layout
-           */
-          forceNarrow: {
-            type: Boolean,
-            value: false
-          },
           enableSeconds: {
             type: Boolean,
             value: false
-          },
-          _queryMatches: {
-            type: Boolean,
-            value: false,
-            observer: '_computeNarrow'
           }
         },
         behaviors: [
           Polymer.IronResizableBehavior
         ],
         observers: [
-          '_updateTime(hour, minute, second)'
         ],
         ready: function() {
           // Override default queryFn with our custom. Only works when done in ready due to possible race condition in the library maybe¯\_(ツ)_/¯
@@ -320,40 +261,29 @@ If you include this element as part of `paper-dialog`, use the class
         },
         _timeChanged: function(time) {
           if (!time) {
-            this.rawValue = 0;
+            this._setTimeObjects(0,0,0);
             return;
           }
-
-          var parsed = this.parseTime(time);
+          var parsed = this.parseTimeWithPeriod(time);
           var cleanedTime = this.formatTime(parsed.hour, parsed.minute, parsed.second);
-          if (cleanedTime !== time) {
-            this.time = cleanedTime;
-            return;
-          }
-          var rawValue = (parsed.hour * 60) + parsed.minute;
-          if (this.enableSeconds) {
-            rawValue = (rawValue * 60) + parsed.second;
-          }
-          this.rawValue = rawValue;
+          this._setTimeObjects(parsed.hour, parsed.minute, parsed.second);
         },
-        _updateTime: function(hour, minute, second) {
-          var rawValue = (hour * 60) + minute;
+        _setTimeObjects:function(hour,min,sec){
+          this.hour = hour;
+          this.minute = min;
           if (this.enableSeconds) {
-            rawValue = (rawValue * 60) + second;
+            this.second = sec;
           }
-          this.rawValue = rawValue;
         },
         formatTime: function(hour, minute, second) {
-          var period = (hour % 24) < 12 ? 'AM' : 'PM';
-          hour = hour % 12 || 12;
           minute = ('0' + minute).substr(-2);
           second = ('0' + second).substr(-2);
           if (this.enableSeconds) {
             minute += ':' + second;
           }
-          return hour + ':' + minute + ' ' + period;
+          return hour + ':' + minute;
         },
-        parseTime: function(timeString) {
+        parseTimeWithPeriod: function(timeString) {
           var pattern = /^\s*(\d{1,2}):?(\d{2})(:?(\d{2}))?(\s*([AaPp])\.?[Mm]\.?|[A-Z])?\s*$/;
           var match = timeString.match(pattern);
           if (!match) {
@@ -363,7 +293,7 @@ If you include this element as part of `paper-dialog`, use the class
           var hour = parseInt(match[1]);
           var minute = parseInt(match[2]);
           var second = match[4] ? parseInt(match[4]) : 0;
-          var period = match[6] ? (match[6][0].toUpperCase() + 'M') : 'AM';
+          var period = match[6] ? (match[6][0].toUpperCase() + 'M') : match[6];
           if (period === 'PM' && hour < 12) {
             hour = (hour + 12) % 24;
           } else if (period === 'AM' && hour === 12) {
@@ -371,44 +301,18 @@ If you include this element as part of `paper-dialog`, use the class
           }
           return {hour: hour, minute: minute, second: second};
         },
-        togglePeriod: function() {
-          this.period = (this.period === 'AM') ? 'PM' : 'AM';
-        },
-        _rawValueChanged: function(value, oldValue) {
-          if (isNaN(parseInt(value))) {
-            this.rawValue = oldValue;
-            return;
-          }
-          if (this.enableSeconds) {
-            this.hour = Math.floor(value / 3600);
-            this.minute = Math.floor(value / 60) % 60;
-            this.second = value % 60;
-          } else {
-            this.hour = Math.floor(value / 60);
-            this.minute = value % 60;
-            this.second = 0;
-          }
-          this.time = this.formatTime(this.hour, this.minute, this.second);
-        },
-        _hour12Changed: function(hour12) {
-          var add = (this.period === 'PM' ? 12 : 0);
-          this.hour = ((hour12 % 12) + add) % 24;
-          this.$['hours-input'].value = (hour12 === 0 ? 12 : hour12);
-        },
         _hourChanged: function(hour, oldValue) {
           hour = parseInt(hour);
           if (isNaN(hour) && !hour) {
             return;
           }
           if (isNaN(hour)) {
-            warn('Invalid number:', hour);
             this.hour = oldValue;
             return;
           }
           hour = parseFloat(hour) % 24;
           this.hour = hour;
-          this.hour12 = this._twelveHour(hour);
-          this.period = ['PM', 'AM'][+(hour < 12)];
+          this.$['hours-input'].value = ""+hour;
         },
         _hoursInputValueChanged: function() {
           var value = this.$['hours-input'].value;
@@ -416,12 +320,6 @@ If you include this element as part of `paper-dialog`, use the class
             return;
           }
           this.hour = value;
-        },
-        _hoursInputBlur: function() {
-          var value = this.$['hours-input'].value;
-          if (isNaN(value) || !value || value === '0' || value > 12) {
-            this.$['hours-input'].value = this.hour12;
-          }
         },
         _minuteChanged: function(minute) {
           minute = parseFloat(minute) % 60;
@@ -435,14 +333,6 @@ If you include this element as part of `paper-dialog`, use the class
           }
           this.minute = value;  
         },
-        _minutesInputBlur: function() {
-          var value = this.$['minutes-input'].value;
-          if (isNaN(value) || !value || value > 59) {
-            this.$['minutes-input'].value = this._zeroPad(this.minute, 2);
-            return;
-          }          
-          this.minute = value;
-        },
         _secondChanged: function(second) {
           second = parseFloat(second) % 60;
           this.second = second;
@@ -455,32 +345,11 @@ If you include this element as part of `paper-dialog`, use the class
           }
           this.second = value;   
         },
-        _secondsInputBlur: function() {
-          var value = this.$['seconds-input'].value;
-          if (isNaN(value) || !value || value > 59) {
-            this.$['seconds-input'].value = this._zeroPad(this.second, 2);
-            return;
-          }          
-          this.second = value;
-        },
-        _periodChanged: function(period) {
-          if (isNaN(parseInt(this.hour)) || isNaN(parseInt(this.minute))) {
-            return;
-          }
-          if (period === 'AM' &&  this.hour >= 12) {
-            this.hour -= 12;
-          } else if (period === 'PM' && this.hour < 12) {
-            this.hour += 12;
-          }
-        },
         _zeroPad: function(value, length) {
           if (value === undefined || isNaN(value) || isNaN(length)) {
             return;
           }
           return ('0' + value).substr(-length);
-        },
-        _twelveHour: function(hour) {
-          return hour % 12 || 12;
         },
         _inputFocus: function(ev) {
           this.$['iron-selector'].selected = ev.target.name;
@@ -488,9 +357,6 @@ If you include this element as part of `paper-dialog`, use the class
         },
         _isEqual: function(a, b) {
           return a === b;
-        },
-        _computeNarrow: function() {
-          this.set('narrow', this._queryMatches || this.forceNarrow);
         }
       });
     })();
