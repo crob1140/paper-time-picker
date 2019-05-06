@@ -1,7 +1,7 @@
 {
-  "name": "paper-time-picker",
-  "version": "1.2.1",
-  "description": "Provides a responsive time picker based on the material design spec",
+  "name": "paper-simple-time-picker",
+  "version": "1.0.0",
+  "description": "Provides a simple hour and minute time picker with a focus on quick time entry and usage simplicity. Forked off bendavis78's original paper-time-picker from http://bendavis78.github.io/paper-time-picker/",
   "main": "index.html",
   "devDependencies": {
     "browser-sync": "^2.8.0",
@@ -29,12 +29,12 @@
   },
   "keywords": [
     "web-component",
-    "webcomponents",
+    "web-components",
     "polymer",
     "timepicker",
     "paper-simple-time-picker"
   ],
-  "author": "Ben Davis <bendavis78@gmail.com>",
+  "author": "Andrwe Yang <andrew.yang@retrievercommunications.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/bendavis78/paper-time-picker/issues"
