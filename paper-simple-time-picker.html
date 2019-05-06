@@ -148,7 +148,8 @@ If you include this element as part of `paper-dialog`, use the class
             allowed-pattern="[0-9]" 
             no-label-float
             on-input="_hoursInputValueChanged"
-            on-focus="_inputFocus">
+            on-focus="_inputFocus"
+            on-keydown="_handleKeyDown">
           </paper-input>
           <div class="sep">:</div>
           <paper-input id="minutes-input" 
@@ -158,7 +159,8 @@ If you include this element as part of `paper-dialog`, use the class
             allowed-pattern="[0-9]" 
             no-label-float
             on-input="_minutesInputValueChanged"
-            on-focus="_inputFocus">
+            on-focus="_inputFocus"
+            on-keydown="_handleKeyDown">
           </paper-input>
           <div class="sep" hidden$="[[!enableSeconds]]">:</div>
           <paper-input id="seconds-input" 
@@ -170,7 +172,8 @@ If you include this element as part of `paper-dialog`, use the class
             no-label-float
             hidden$="[[!enableSeconds]]"
             on-input="_secondsInputValueChanged"
-            on-focus="_inputFocus">
+            on-focus="_inputFocus"
+            on-keydown="_handleKeyDown">
           </paper-input>
         </iron-selector>
         <paper-autocomplete-suggestions class="autocomplete-suggestions" id="autocomplete-hours" for="hours-input" min-length=0 show-results-on-focus="true" max-viewable-items="[[maxViewableItems]]"></paper-autocomplete-suggestions>
@@ -186,6 +189,15 @@ If you include this element as part of `paper-dialog`, use the class
           console.warn.apply(console, arguments);
         }
       }
+
+      var KEY_CODES = {
+        LEFT_ARROW: 37,
+        RIGHT_ARROW: 39,
+        UP_ARROW: 38,
+        DOWN_ARROW: 40,
+        ENTER: 13,
+        ESCAPE: 27
+      };
 
       Polymer({
         is: 'paper-simple-time-picker',
@@ -290,6 +302,11 @@ If you include this element as part of `paper-dialog`, use the class
         },
         closeDialogEvent: function() {
           this.fire('close');
+        },
+        _handleKeyDown: function(event){
+          if(event.keyCode === KEY_CODES.ENTER){
+            this.closeDialogEvent();
+          }
         },
         _onHourSelected: function(event){
           this.hour = parseInt(event.detail.text);
