@@ -125,6 +125,16 @@ If you include this element as part of `paper-dialog`, use the class
       #minutes-input{
         text-align: left;
       }
+      paper-autocomplete-suggestions{
+        --suggestions-wrapper	:{
+          left: 0px;
+          right: 0px;
+        }
+        --suggestions-item:{
+          text-align: center;
+          display: grid;
+        }
+      }
     </style>
     <div id="timePicker">
       <div id="left-border">
@@ -164,11 +174,10 @@ If you include this element as part of `paper-dialog`, use the class
             on-input="_secondsInputValueChanged"
             on-focus="_inputFocus">
           </paper-input>
-          <!-- autocompletes here to not cover any time options -->
-          <paper-autocomplete-suggestions id="autocomplete-hours" for="hours-input" min-length=0 show-results-on-focus="true" max-viewable-items="[[maxViewableItems]]"></paper-autocomplete-suggestions>
-          <paper-autocomplete-suggestions id="autocomplete-minutes" for="minutes-input" min-length=0 show-results-on-focus="true" max-viewable-items="[[maxViewableItems]]"></paper-autocomplete-suggestions>
-          <paper-autocomplete-suggestions id="autocomplete-seconds" for="seconds-input" min-length=0 show-results-on-focus="true" max-viewable-items="[[maxViewableItems]]"></paper-autocomplete-suggestions>
         </iron-selector>
+        <paper-autocomplete-suggestions class="autocomplete-suggestions" id="autocomplete-hours" for="hours-input" min-length=0 show-results-on-focus="true" max-viewable-items="[[maxViewableItems]]"></paper-autocomplete-suggestions>
+        <paper-autocomplete-suggestions class="autocomplete-suggestions" id="autocomplete-minutes" for="minutes-input" min-length=0 show-results-on-focus="true" max-viewable-items="[[maxViewableItems]]"></paper-autocomplete-suggestions>
+        <paper-autocomplete-suggestions class="autocomplete-suggestions" id="autocomplete-seconds" for="seconds-input" min-length=0 show-results-on-focus="true" max-viewable-items="[[maxViewableItems]]"></paper-autocomplete-suggestions>
       </div>
     </div>
   </template>
