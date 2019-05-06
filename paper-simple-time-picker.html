@@ -282,14 +282,30 @@ If you include this element as part of `paper-dialog`, use the class
         focusHoursInput: function () {
           this.$$('#hours-input').focus();
         },
+        focusMinutesInput: function() {
+          this.$$('#minutes-input').focus();
+        },
+        focusSecondsInput: function() {
+          this.$$('#seconds-input').focus();
+        },
+        closeDialogEvent: function() {
+          this.fire('close');
+        },
         _onHourSelected: function(event){
           this.hour = parseInt(event.detail.text);
+          this.focusMinutesInput();
         },
         _onMinuteSelected: function(event){
           this.minute = parseInt(event.detail.text);
+          if(this.enableSeconds){
+            this.focusSecondsInput();
+          } else {
+            this.closeDialogEvent();
+          }
         },
         _onSecondSelected: function(event){
-          this.second = parseInt(event.detail.text);        
+          this.second = parseInt(event.detail.text);
+          this.closeDialogEvent();
         },
         _returnAllResults: function (datasource, query) {
           // Must deep copy or it fails to re-open
