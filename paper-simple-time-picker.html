@@ -250,7 +250,7 @@ If you include this element as part of `paper-dialog`, use the class
           /**
            * Use a 12-Hour clock and show AM or PM in the output time
            */
-          use12HourClock: {
+          useTwelveHourClock: {
             type: Boolean,
             value: false
           }
@@ -348,7 +348,7 @@ If you include this element as part of `paper-dialog`, use the class
             minute += ':' + second;
           }
           var period = "";
-          if (this.use12HourClock) {
+          if (this.useTwelveHourClock) {
             if (hour === 0) {
               hour = 12;
               period = "AM";
