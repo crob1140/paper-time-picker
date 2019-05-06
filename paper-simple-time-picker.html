@@ -165,9 +165,9 @@ If you include this element as part of `paper-dialog`, use the class
             on-focus="_inputFocus">
           </paper-input>
           <!-- autocompletes here to not cover any time options -->
-          <paper-autocomplete-suggestions id="autocomplete-hours" for="hours-input" min-length=0 show-results-on-focus="true"></paper-autocomplete-suggestions>
-          <paper-autocomplete-suggestions id="autocomplete-minutes" for="minutes-input" min-length=0 show-results-on-focus="true"></paper-autocomplete-suggestions>
-          <paper-autocomplete-suggestions id="autocomplete-seconds" for="seconds-input" min-length=0 show-results-on-focus="true"></paper-autocomplete-suggestions>
+          <paper-autocomplete-suggestions id="autocomplete-hours" for="hours-input" min-length=0 show-results-on-focus="true" max-viewable-items="[[maxViewableItems]]"></paper-autocomplete-suggestions>
+          <paper-autocomplete-suggestions id="autocomplete-minutes" for="minutes-input" min-length=0 show-results-on-focus="true" max-viewable-items="[[maxViewableItems]]"></paper-autocomplete-suggestions>
+          <paper-autocomplete-suggestions id="autocomplete-seconds" for="seconds-input" min-length=0 show-results-on-focus="true" max-viewable-items="[[maxViewableItems]]"></paper-autocomplete-suggestions>
         </iron-selector>
       </div>
     </div>
@@ -219,9 +219,19 @@ If you include this element as part of `paper-dialog`, use the class
             observer: '_secondChanged',
             value: 0
           },
-          enableSeconds: {
+          /**
+           * Show seconds input
+           */
+           enableSeconds: {
             type: Boolean,
             value: false
+          },
+          /**
+           * Max number of suggestions to be displayed without scrolling
+           */
+           maxViewableItems: {
+            type: Number,
+            value: 12
           },
           /**
            * Show the minutes and seconds in these increments
