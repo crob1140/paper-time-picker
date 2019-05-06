@@ -279,7 +279,7 @@ If you include this element as part of `paper-dialog`, use the class
           autocompleteMinutes.addEventListener('autocomplete-selected', this._onMinuteSelected.bind(this));
           autocompleteSeconds.addEventListener('autocomplete-selected', this._onSecondSelected.bind(this));
         },
-        focusHours: function () {
+        focusHoursInput: function () {
           this.$$('#hours-input').focus();
         },
         _onHourSelected: function(event){
