@@ -83,7 +83,9 @@ If you include this element as part of `paper-dialog`, use the class
 
       /** Content ********************/
       #content > iron-selector {
-        margin-top: 10px;
+        width: auto;
+        margin-left: 10px;
+        margin-right: 10px;
       }
       #content .time {
         @apply(--paper-font-display2);
@@ -125,13 +127,14 @@ If you include this element as part of `paper-dialog`, use the class
       }
       paper-autocomplete-suggestions{
         --suggestions-wrapper	:{
-          left: 0px;
-          right: 0px;
+          width: auto;
         }
         --suggestions-item:{
-          text-align: center;
-          display: grid;
+          text-align: left;
         }
+      }
+      .selection-div{
+        display: inline-block !important;
       }
     </style>
     <div id="timePicker">
@@ -140,45 +143,51 @@ If you include this element as part of `paper-dialog`, use the class
       </div>
       <div id="content">
         <iron-selector id="iron-selector" class="time" selectable="[name]" attr-for-selected="name">
-          <paper-input id="hours-input" 
-            name="hours" 
-            class="hour" 
-            maxlength="2" 
-            auto-validate 
-            allowed-pattern="[0-9]" 
-            no-label-float
-            on-input="_hoursInputValueChanged"
-            on-focus="_inputFocus"
-            on-keydown="_handleKeyDown">
-          </paper-input>
-          <div class="sep">:</div>
-          <paper-input id="minutes-input" 
-            name="minutes" class="minute" 
-            maxlength="2" 
-            auto-validate 
-            allowed-pattern="[0-9]" 
-            no-label-float
-            on-input="_minutesInputValueChanged"
-            on-focus="_inputFocus"
-            on-keydown="_handleKeyDown">
-          </paper-input>
-          <div class="sep" hidden$="[[!enableSeconds]]">:</div>
-          <paper-input id="seconds-input" 
-            name="seconds" 
-            class="second" 
-            maxlength="2" 
-            auto-validate 
-            allowed-pattern="[0-9]" 
-            no-label-float
-            hidden$="[[!enableSeconds]]"
-            on-input="_secondsInputValueChanged"
-            on-focus="_inputFocus"
-            on-keydown="_handleKeyDown">
-          </paper-input>
+            <div class="selection-div">
+              <paper-input id="hours-input" 
+                name="hours" 
+                class="hour" 
+                maxlength="2" 
+                auto-validate 
+                allowed-pattern="[0-9]" 
+                no-label-float
+                on-input="_hoursInputValueChanged"
+                on-focus="_inputFocus"
+                on-keydown="_handleKeyDown">
+              </paper-input>
+              <paper-autocomplete-suggestions class="autocomplete-suggestions" id="autocomplete-hours" for="hours-input" min-length=0 show-results-on-focus="true" max-viewable-items="[[maxViewableItems]]"></paper-autocomplete-suggestions>
+            </div>
+            <div class="sep">:</div>
+            <div class="selection-div">
+              <paper-input id="minutes-input" 
+                name="minutes" class="minute" 
+                maxlength="2" 
+                auto-validate 
+                allowed-pattern="[0-9]" 
+                no-label-float
+                on-input="_minutesInputValueChanged"
+                on-focus="_inputFocus"
+                on-keydown="_handleKeyDown">
+              </paper-input>
+              <paper-autocomplete-suggestions class="autocomplete-suggestions" id="autocomplete-minutes" for="minutes-input" min-length=0 show-results-on-focus="true" max-viewable-items="[[maxViewableItems]]"></paper-autocomplete-suggestions>
+            </div>
+            <div class="sep" hidden$="[[!enableSeconds]]">:</div>
+            <div class="selection-div">
+              <paper-input id="seconds-input" 
+                name="seconds" 
+                class="second" 
+                maxlength="2" 
+                auto-validate 
+                allowed-pattern="[0-9]" 
+                no-label-float
+                hidden$="[[!enableSeconds]]"
+                on-input="_secondsInputValueChanged"
+                on-focus="_inputFocus"
+                on-keydown="_handleKeyDown">
+              </paper-input>
+              <paper-autocomplete-suggestions class="autocomplete-suggestions" id="autocomplete-seconds" for="seconds-input" min-length=0 show-results-on-focus="true" max-viewable-items="[[maxViewableItems]]"></paper-autocomplete-suggestions>
+            </div>
         </iron-selector>
-        <paper-autocomplete-suggestions class="autocomplete-suggestions" id="autocomplete-hours" for="hours-input" min-length=0 show-results-on-focus="true" max-viewable-items="[[maxViewableItems]]"></paper-autocomplete-suggestions>
-        <paper-autocomplete-suggestions class="autocomplete-suggestions" id="autocomplete-minutes" for="minutes-input" min-length=0 show-results-on-focus="true" max-viewable-items="[[maxViewableItems]]"></paper-autocomplete-suggestions>
-        <paper-autocomplete-suggestions class="autocomplete-suggestions" id="autocomplete-seconds" for="seconds-input" min-length=0 show-results-on-focus="true" max-viewable-items="[[maxViewableItems]]"></paper-autocomplete-suggestions>
       </div>
     </div>
   </template>
