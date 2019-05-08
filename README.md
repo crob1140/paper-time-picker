@@ -1,14 +1,9 @@
 paper-simple-time-picker
 ==========
-Material Design time picker, compatible with *Polymer 1.0*
+Simple time picker, compatible with *Polymer 1.0*
 
 Provides a responsive time picker based on the material design spec. This
 component aims to be a clone of the time picker introduced in Android Lollipop.
-
-![wide picker screenshot][wide] ![narrow picker screenshot][narrow]
-
-See the [component page](http://bendavis78.github.io/paper-time-picker/) for
-full documentation.
 
 ## Examples:
 
@@ -43,14 +38,3 @@ If you include this element as part of `paper-dialog`, use the class
 When filing a bug report, please provide an example of how to repoduce using
 plunker, jsbin, jsfiddle, etc. You can use the following plunker as a starting
 point: http://plnkr.co/edit/gVQluG0GrFP3RzCPZPIi
-
----
-
-If you find this component useful, please show your support by donating to
-[Bold Idea](http://boldidea.org). Click the button below!
-
-[![ideaSpark campaign button][donate]](https://donorbox.org/bold-idea-make-ideaspark-possible-for-dallas-area-students)
-
-[wide]: http://i.imgur.com/kosRJrF.png
-[narrow]: http://i.imgur.com/s3honuG.png
-[donate]: http://www.boldidea.org/donate-badge-md-1.png
