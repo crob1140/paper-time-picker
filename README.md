@@ -2,8 +2,10 @@ paper-simple-time-picker
 ==========
 Simple time picker, compatible with *Polymer 1.0*
 
-Provides a responsive time picker based on the material design spec. This
+Provides a responsive time picker with two dropdown boxes and some keyboard functionality. This
 component aims to be a clone of the time picker introduced in Android Lollipop.
+
+Originally branched off bendavis78's https://github.com/bendavis78/paper-date-picker but no longer really resembles the material design spec and original styling or functionality.
 
 ## Examples:
 
