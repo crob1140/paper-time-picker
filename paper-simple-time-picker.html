@@ -314,7 +314,30 @@ If you include this element as part of `paper-dialog`, use the class
         },
         _handleKeyDown: function(event){
           if(event.keyCode === KEY_CODES.ENTER){
-            this.closeDialogEvent();
+            var highlightedHour = this.$$('#autocomplete-hours').highlightedSuggestion;
+            var hourChosen = !(highlightedHour === null || highlightedHour === undefined || this._isEmpty(highlightedHour));
+            var hourFocused = this.$$('#hours-input').focused;
+
+            var highlightedMinute = this.$$('#autocomplete-minutes').highlightedSuggestion;
+            var minuteChosen = !(highlightedMinute === null || highlightedMinute === undefined || this._isEmpty(highlightedMinute));
+            var minuteFocused = this.$$('#minutes-input').focused;
+            
+            var highlightedSecond = this.$$('#autocomplete-seconds').highlightedSuggestion;
+            var secondChosen = !(highlightedSecond === null || highlightedSecond === undefined || this._isEmpty(highlightedSecond));
+            var secondFocused = this.$$('#seconds-input').focused;
+
+            // If we're on the hour input, and no items in the dropdown have been chosen, we go to minutes without changing anything
+            if(hourFocused && !hourChosen){
+              this.focusMinutesInput();
+            } else if (minuteFocused && !minuteChosen){
+              if(this.enableSeconds){
+                this.focusSecondsInput();
+              } else {
+                this.closeDialogEvent();
+              }
+            } else if (this.enableSeconds && (secondFocused && !secondChosen)){
+              this.closeDialogEvent();
+            }
           }
         },
         _onHourSelected: function(event){
@@ -487,6 +510,13 @@ If you include this element as part of `paper-dialog`, use the class
         },
         _isEqual: function(a, b) {
           return a === b;
+        },
+        _isEmpty: function (obj) {
+          for (var key in obj) {
+            if (obj.hasOwnProperty(key))
+              return false;
+          }
+          return true;
         }
       });
     })();
