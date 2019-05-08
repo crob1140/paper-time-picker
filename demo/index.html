@@ -28,7 +28,7 @@
     <section>
       <h1>{{time}}</h1>
       <paper-button class="btn" on-tap="showDialog" raised>Change Time</paper-button>
-      <paper-dialog id="dialog" class="paper-simple-time-picker-dialog" on-iron-overlay-opened="focusHoursInput" modal on-iron-overlay-closed="dismissDialog" on-close="closeDialog">
+      <paper-dialog id="dialog" class="paper-simple-time-picker-dialog" on-iron-overlay-opened="onTimePickerOpen" modal on-iron-overlay-closed="dismissDialog" on-close="closeDialog">
         <paper-simple-time-picker id="picker" time="[[time]]" use-twelve-hour-clock></paper-simple-time-picker>
       </paper-dialog>
     </section>
@@ -47,8 +47,8 @@
         scope.time = scope.$.picker.time;
         this.$.dialog.toggle();
       };
-      scope.focusHoursInput = function(){
-        this.$.picker.focusHoursInput();
+      scope.onTimePickerOpen = function(){
+        this.$.picker.onTimePickerOpen();
       };   
       scope.showDialog = function() {
         this.$.dialog.toggle();
