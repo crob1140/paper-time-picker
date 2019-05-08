@@ -125,6 +125,10 @@ If you include this element as part of `paper-dialog`, use the class
         text-align: left;
       }
       paper-autocomplete-suggestions{
+        display: float;
+        position: absolute;
+        z-index: 10000;
+
         --suggestions-wrapper	:{
           width: auto;
         }
@@ -133,7 +137,7 @@ If you include this element as part of `paper-dialog`, use the class
         }
       }
       .selection-div{
-        display: inline-block !important;
+        display: inline-block;
       }
     </style>
     <div id="timePicker">
@@ -260,6 +264,9 @@ If you include this element as part of `paper-dialog`, use the class
             type: Number,
             value: 12
           },
+          _originalMaxViewableItems:{
+            type: Number
+          },
           /**
            * Show the minutes and seconds in these increments
            */
@@ -279,6 +286,8 @@ If you include this element as part of `paper-dialog`, use the class
           '_updateTime(hour, minute, second)'
         ],
         attached: function(){
+          this._originalMaxViewableItems = this.maxViewableItems;
+          
           var autocompleteHours = this.$$('#autocomplete-hours'); 
           var autocompleteMinutes = this.$$('#autocomplete-minutes');
           var autocompleteSeconds = this.$$('#autocomplete-seconds');
@@ -300,6 +309,9 @@ If you include this element as part of `paper-dialog`, use the class
           autocompleteSeconds.addEventListener('autocomplete-selected', this._onSecondSelected.bind(this));
         },
         onTimePickerOpen: function () {
+          this._fitSuggestionsToViewport(this.$$('#autocomplete-hours'));
+          this._fitSuggestionsToViewport(this.$$('#autocomplete-minutes'));
+          this._fitSuggestionsToViewport(this.$$('#autocomplete-seconds'));
           this.focusHoursInput();
         },
         focusHoursInput: function () {
@@ -519,6 +531,42 @@ If you include this element as part of `paper-dialog`, use the class
               return false;
           }
           return true;
+        },
+        _fitSuggestionsToViewport: function (suggestionBox) {
+          // 1) check if its in viewport.
+          // 2) if not, place the dropdown on top then check if it's in viewport.
+          // 3) if not, reduce height of dropdown and go back to 1). Repeat until in viewport.
+          var inputWidth = this.$$('#hours-input').clientWidth / 2;
+          var inputHeight = this.$$('#hours-input').clientHeight;
+          
+          // Set boxes to original positions
+          this.maxViewableItems = this._originalMaxViewableItems;
+          suggestionBox._itemHeightChanged();
+
+          suggestionBox.style.transform = "translate(-" + inputWidth + "px, " + (inputHeight / 2) + "px)";
+          var suggestionsHeight = suggestionBox._itemHeight * suggestionBox.maxViewableItems;
+
+          while (!this._isYPositionWithinViewport(suggestionBox.getBoundingClientRect().bottom + suggestionsHeight)) {
+            var upModeYPos = inputHeight + suggestionsHeight;
+            var newYPosition = upModeYPos - (inputHeight / 2);
+
+            // Move the box top instead
+            suggestionBox.style.transform = "translate(-" + inputWidth + "px, -" + newYPosition + "px)";
+            if(!this._isYPositionWithinViewport(suggestionBox.getBoundingClientRect().top)){
+              this.maxViewableItems--;
+              
+              inputHeight = this.$$('#hours-input').clientHeight;
+              suggestionsHeight = suggestionBox._itemHeight * suggestionBox.maxViewableItems;
+              suggestionBox.style.transform = "translate(-" + inputWidth + "px, " + (inputHeight / 2) + "px)";
+              suggestionBox._itemHeightChanged();
+            }  
+          }
+        },
+        _isYPositionWithinViewport: function(yPos) {
+          return (
+            yPos >= 0 &&
+            yPos <= (window.innerHeight || document.documentElement.clientHeight)
+          );
         }
       });
     })();
