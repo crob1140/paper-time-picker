@@ -533,28 +533,32 @@ If you include this element as part of `paper-dialog`, use the class
           // 1) check if its in viewport.
           // 2) if not, place the dropdown on top then check if it's in viewport.
           // 3) if not, reduce height of dropdown and go back to 1). Repeat until in viewport.
-          var inputWidth = this.$$('#hours-input').clientWidth / 2;
-          var inputHeight = this.$$('#hours-input').clientHeight;
-          
-          // Set boxes to original positions
-          this.maxViewableItems = this._originalMaxViewableItems;
-          suggestionBox._itemHeightChanged();
+          const xTranslate = this.$$('#hours-input').clientWidth / 2;
+          const inputHeight = this.$$('#hours-input').clientHeight;
 
-          suggestionBox.style.transform = "translate(-" + inputWidth + "px, " + (inputHeight / 2) + "px)";
+          // Set boxes to original positions
+          this.maxViewableItems = this._originalMaxViewableItems > suggestionBox.source.length 
+            ? suggestionBox.source.length 
+            : this._originalMaxViewableItems;
+
+          suggestionBox._itemHeightChanged();
+          suggestionBox.style.transform = "translate(-" + xTranslate  + "px, " + (inputHeight / 2) + "px)";
+
           var suggestionsHeight = suggestionBox._itemHeight * suggestionBox.maxViewableItems;
 
           while (!this._isYPositionWithinViewport(suggestionBox.getBoundingClientRect().bottom + suggestionsHeight)) {
-            var upModeYPos = inputHeight + suggestionsHeight;
-            var newYPosition = upModeYPos - (inputHeight / 2);
+            const upModeYPos = inputHeight + suggestionsHeight;
+            const newYPosition = upModeYPos - (inputHeight / 2);
 
-            // Move the box top instead
-            suggestionBox.style.transform = "translate(-" + inputWidth + "px, -" + newYPosition + "px)";
+            // Move the drawer go up instead
+            suggestionBox.style.transform = "translate(-" + xTranslate + "px, -" + newYPosition + "px)";
+
+            // If it's still not inside, we go back to normal then reduce max size by 1
             if(!this._isYPositionWithinViewport(suggestionBox.getBoundingClientRect().top)){
               this.maxViewableItems--;
               
-              inputHeight = this.$$('#hours-input').clientHeight;
               suggestionsHeight = suggestionBox._itemHeight * suggestionBox.maxViewableItems;
-              suggestionBox.style.transform = "translate(-" + inputWidth + "px, " + (inputHeight / 2) + "px)";
+              suggestionBox.style.transform = "translate(-" + xTranslate + "px, " + (inputHeight / 2) + "px)";
               suggestionBox._itemHeightChanged();
             }  
           }
