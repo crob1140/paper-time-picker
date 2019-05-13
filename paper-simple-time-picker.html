@@ -285,9 +285,9 @@ If you include this element as part of `paper-dialog`, use the class
         attached: function(){
           this._originalMaxViewableItems = this.maxViewableItems;
           
-          var autocompleteHours = this.$$('#autocomplete-hours'); 
-          var autocompleteMinutes = this.$$('#autocomplete-minutes');
-          var autocompleteSeconds = this.$$('#autocomplete-seconds');
+          var autocompleteHours = this.$['autocomplete-hours']; 
+          var autocompleteMinutes = this.$['autocomplete-minutes'];
+          var autocompleteSeconds = this.$['autocomplete-seconds'];
 
           // Override default queryFn with our custom. Only works when done in ready due to possible race condition in the library maybe¯\_(ツ)_/¯
           autocompleteHours.queryFn = this._returnAllResults;
@@ -306,36 +306,36 @@ If you include this element as part of `paper-dialog`, use the class
           autocompleteSeconds.addEventListener('autocomplete-selected', this._onSecondSelected.bind(this));
         },
         onTimePickerOpen: function () {
-          this._fitSuggestionsToViewport(this.$$('#autocomplete-hours'));
-          this._fitSuggestionsToViewport(this.$$('#autocomplete-minutes'));
-          this._fitSuggestionsToViewport(this.$$('#autocomplete-seconds'));
+          this._fitSuggestionsToViewport(this.$['autocomplete-hours']);
+          this._fitSuggestionsToViewport(this.$['autocomplete-minutes']);
+          this._fitSuggestionsToViewport(this.$['autocomplete-seconds']);
           this.focusHoursInput();
         },
         focusHoursInput: function () {
-          this.$$('#hours-input').focus();
+          this.$['hours-input'].focus();
         },
         focusMinutesInput: function() {
-          this.$$('#minutes-input').focus();
+          this.$['minutes-input'].focus();
         },
         focusSecondsInput: function() {
-          this.$$('#seconds-input').focus();
+          this.$['seconds-input'].focus();
         },
         closeDialogEvent: function() {
           this.fire('close');
         },
         _handleKeyDown: function(event){
           if(event.keyCode === KEY_CODES.ENTER){
-            var highlightedHour = this.$$('#autocomplete-hours').highlightedSuggestion;
+            var highlightedHour = this.$['autocomplete-hours'].highlightedSuggestion;
             var hourChosen = !(highlightedHour === null || highlightedHour === undefined || this._isEmpty(highlightedHour));
-            var hourFocused = this.$$('#hours-input').focused;
+            var hourFocused = this.$['hours-input'].focused;
 
-            var highlightedMinute = this.$$('#autocomplete-minutes').highlightedSuggestion;
+            var highlightedMinute = this.$['autocomplete-minutes'].highlightedSuggestion;
             var minuteChosen = !(highlightedMinute === null || highlightedMinute === undefined || this._isEmpty(highlightedMinute));
-            var minuteFocused = this.$$('#minutes-input').focused;
+            var minuteFocused = this.$['minutes-input'].focused;
             
-            var highlightedSecond = this.$$('#autocomplete-seconds').highlightedSuggestion;
+            var highlightedSecond = this.$['autocomplete-seconds'].highlightedSuggestion;
             var secondChosen = !(highlightedSecond === null || highlightedSecond === undefined || this._isEmpty(highlightedSecond));
-            var secondFocused = this.$$('#seconds-input').focused;
+            var secondFocused = this.$['seconds-input'].focused;
 
             // If we're on the hour input, and no items in the dropdown have been chosen, we go to minutes without changing anything
             if(hourFocused && !hourChosen){
@@ -533,8 +533,8 @@ If you include this element as part of `paper-dialog`, use the class
           // 1) check if its in viewport.
           // 2) if not, place the dropdown on top then check if it's in viewport.
           // 3) if not, reduce height of dropdown and go back to 1). Repeat until in viewport.
-          const xTranslate = this.$$('#hours-input').clientWidth / 2;
-          const inputHeight = this.$$('#hours-input').clientHeight;
+          const xTranslate = this.$['hours-input'].clientWidth / 2;
+          const inputHeight = this.$['hours-input'].clientHeight;
 
           // Set boxes to original positions
           this.maxViewableItems = this._originalMaxViewableItems > suggestionBox.source.length 
