@@ -23,17 +23,17 @@
     <style>
       /* Application of mixins to local .paper-simple-time-picker-dialog elements */
       .paper-simple-time-picker-dialog {
-        @apply(--paper-simple-time-picker-dialog);
+        @apply --paper-simple-time-picker-dialog;
       }
       .paper-simple-time-picker-dialog > paper-simple-time-picker {
         --paper-calendar: {
-          @apply(--paper-simple-time-picker-dialog-calendar);
+          @apply --paper-simple-time-picker-dialog-calendar;
         };
-        @apply(--paper-simple-time-picker-dialog-picker);
+        @apply --paper-simple-time-picker-dialog-picker;
       }
       .paper-simple-time-picker-dialog > paper-simple-time-picker:not([narrow]) {
         --paper-simple-time-picker-heading: {
-          @apply(--paper-simple-time-picker-dialog-heading);
+          @apply --paper-simple-time-picker-dialog-heading;
         };
       }
     </style>

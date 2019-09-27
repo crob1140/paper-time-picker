@@ -1,4 +1,4 @@
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../iron-selector/iron-selector.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../paper-input/paper-input.html">
@@ -45,11 +45,11 @@ If you include this element as part of `paper-dialog`, use the class
   /* include dialog style at document-level for backward compatibility */
 </style>
 
-<dom-module id="paper-simple-time-picker">
+<dom-module is="paper-simple-time-picker">
   <template>
     <style>
       :host * {
-        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
       }
 
       :host {
@@ -61,7 +61,7 @@ If you include this element as part of `paper-dialog`, use the class
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
-        @apply(--paper-font-body1);
+        @apply --paper-font-body1;
         font-size: 14px;
       }
 
@@ -74,66 +74,78 @@ If you include this element as part of `paper-dialog`, use the class
         box-sizing: border-box;
         width: 30px;
         background: var(--default-primary-color);
-        @apply(--layout-vertical);
-        @apply(--layout-center-center);
+        @apply --layout-vertical;
+        @apply --layout-center-center;
       }
 
       /** Content ********************/
-      #content > iron-selector {
+      #content>iron-selector {
         width: auto;
         margin-left: 10px;
         margin-right: 10px;
       }
+
       #content .time {
-        @apply(--paper-font-display2);
-        @apply(--layout-horizontal);
-        @apply(--layout-end-justified);
+        @apply --paper-font-display2;
+        @apply --layout-horizontal;
+        @apply --layout-end-justified;
         width: 5.34ex;
       }
-      :host([enable-seconds]) #content .time{
+
+      :host([enable-seconds]) #content .time {
         width: 8.5ex;
         font-size: 40px;
       }
+
       #content .iron-selected {
         color: var(--text-primary-color);
       }
+
       #content .time div,
       #content .sep {
         display: flex;
         align-items: center;
         justify-content: center;
       }
+
       #content paper-input {
         --paper-input-container-color: var(--light-primary-color);
         --paper-input-container-focus-color: var(--text-primary-color);
         --paper-input-container-input-color: var(--light-primary-color);
         --paper-input-container-input-focus: var(--text-primary-color);
+
         --paper-input-container-input: {
-          @apply(--paper-font-display2);
+          @apply --paper-font-display2;
         }
       }
+
       #content paper-input.iron-selected {
         --paper-input-container-input-color: var(--text-primary-color);
       }
+
       #hours-input {
         text-align: right;
       }
-      #minutes-input{
+
+      #minutes-input {
         text-align: left;
       }
-      paper-autocomplete-suggestions{
+
+      paper-autocomplete-suggestions {
         display: float;
         position: absolute;
         z-index: 10000;
 
-        --suggestions-wrapper	:{
+        --suggestions-wrapper: {
           width: auto;
         }
-        --suggestions-item:{
+
+        --suggestions-item: {
           text-align: left;
         }
       }
-      .selection-div{
+
+      .selection-div {
         display: inline-block;
       }
     </style>
@@ -143,75 +155,53 @@ If you include this element as part of `paper-dialog`, use the class
       </div>
       <div id="content">
         <iron-selector id="iron-selector" class="time" selectable="[name]" attr-for-selected="name">
-            <div class="selection-div">
-              <paper-input id="hours-input" 
-                name="hours" 
-                class="hour" 
-                maxlength="2" 
-                auto-validate 
-                allowed-pattern="[0-9]" 
-                no-label-float
-                on-input="_hoursInputValueChanged"
-                on-focus="_inputFocus"
-                on-keydown="_handleKeyDown">
-              </paper-input>
-              <paper-autocomplete-suggestions class="autocomplete-suggestions" id="autocomplete-hours" for="hours-input" min-length=0 show-results-on-focus="true" max-viewable-items="[[maxViewableItems]]"></paper-autocomplete-suggestions>
-            </div>
-            <div class="sep">:</div>
-            <div class="selection-div">
-              <paper-input id="minutes-input" 
-                name="minutes" class="minute" 
-                maxlength="2" 
-                auto-validate 
-                allowed-pattern="[0-9]" 
-                no-label-float
-                on-input="_minutesInputValueChanged"
-                on-focus="_inputFocus"
-                on-keydown="_handleKeyDown">
-              </paper-input>
-              <paper-autocomplete-suggestions class="autocomplete-suggestions" id="autocomplete-minutes" for="minutes-input" min-length=0 show-results-on-focus="true" max-viewable-items="[[maxViewableItems]]"></paper-autocomplete-suggestions>
-            </div>
-            <div class="sep" hidden$="[[!enableSeconds]]">:</div>
-            <div class="selection-div">
-              <paper-input id="seconds-input" 
-                name="seconds" 
-                class="second" 
-                maxlength="2" 
-                auto-validate 
-                allowed-pattern="[0-9]" 
-                no-label-float
-                hidden$="[[!enableSeconds]]"
-                on-input="_secondsInputValueChanged"
-                on-focus="_inputFocus"
-                on-keydown="_handleKeyDown">
-              </paper-input>
-              <paper-autocomplete-suggestions class="autocomplete-suggestions" id="autocomplete-seconds" for="seconds-input" min-length=0 show-results-on-focus="true" max-viewable-items="[[maxViewableItems]]"></paper-autocomplete-suggestions>
-            </div>
+          <div class="selection-div">
+            <paper-input id="hours-input" name="hours" class="hour" maxlength="2" auto-validate allowed-pattern="[0-9]"
+              no-label-float on-input="_hoursInputValueChanged" on-focus="_inputFocus" on-keydown="_handleKeyDown">
+            </paper-input>
+            <paper-autocomplete-suggestions class="autocomplete-suggestions" id="autocomplete-hours" for="hours-input"
+              min-length=0 show-results-on-focus="true" max-viewable-items="[[maxViewableItems]]">
+            </paper-autocomplete-suggestions>
+          </div>
+          <div class="sep">:</div>
+          <div class="selection-div">
+            <paper-input id="minutes-input" name="minutes" class="minute" maxlength="2" auto-validate
+              allowed-pattern="[0-9]" no-label-float on-input="_minutesInputValueChanged" on-focus="_inputFocus"
+              on-keydown="_handleKeyDown">
+            </paper-input>
+            <paper-autocomplete-suggestions class="autocomplete-suggestions" id="autocomplete-minutes"
+              for="minutes-input" min-length=0 show-results-on-focus="true" max-viewable-items="[[maxViewableItems]]">
+            </paper-autocomplete-suggestions>
+          </div>
+          <div class="sep" hidden$="[[!enableSeconds]]">:</div>
+          <div class="selection-div">
+            <paper-input id="seconds-input" name="seconds" class="second" maxlength="2" auto-validate
+              allowed-pattern="[0-9]" no-label-float hidden$="[[!enableSeconds]]" on-input="_secondsInputValueChanged"
+              on-focus="_inputFocus" on-keydown="_handleKeyDown">
+            </paper-input>
+            <paper-autocomplete-suggestions class="autocomplete-suggestions" id="autocomplete-seconds"
+              for="seconds-input" min-length=0 show-results-on-focus="true" max-viewable-items="[[maxViewableItems]]">
+            </paper-autocomplete-suggestions>
+          </div>
         </iron-selector>
       </div>
     </div>
   </template>
   <script>
-    (function() {
-      function warn() {
-        if (window.console) {
-          console.warn.apply(console, arguments);
-        }
-      }
+    const KEY_CODES = {
+      LEFT_ARROW: 37,
+      RIGHT_ARROW: 39,
+      UP_ARROW: 38,
+      DOWN_ARROW: 40,
+      ENTER: 13,
+      ESCAPE: 27,
+      TAB: 9
+    };
 
-      var KEY_CODES = {
-        LEFT_ARROW: 37,
-        RIGHT_ARROW: 39,
-        UP_ARROW: 38,
-        DOWN_ARROW: 40,
-        ENTER: 13,
-        ESCAPE: 27,
-        TAB: 9
-      };
-
-      Polymer({
-        is: 'paper-simple-time-picker',
-        properties: {
+    class PaperSimpleTimePicker extends Polymer.Element {
+      static get is() { return 'paper-simple-time-picker'; }
+      static get properties() {
+        return {
           /**
            * The selected time
            */
@@ -251,18 +241,18 @@ If you include this element as part of `paper-dialog`, use the class
           /**
            * Show seconds input
            */
-           enableSeconds: {
+          enableSeconds: {
             type: Boolean,
             value: false
           },
           /**
            * Max number of suggestions to be displayed without scrolling
            */
-           maxViewableItems: {
+          maxViewableItems: {
             type: Number,
             value: 12
           },
-          _originalMaxViewableItems:{
+          _originalMaxViewableItems: {
             type: Number
           },
           /**
@@ -279,14 +269,21 @@ If you include this element as part of `paper-dialog`, use the class
             type: Boolean,
             value: false
           }
-        },
-        observers: [
+        }
+      }
+      static get observers() {
+        return [
           '_updateTime(hour, minute, second)'
-        ],
-        attached: function(){
+        ]
+      }
+
+      connectedCallback() {
+        // 1st argument to beforeNextRender is used as the "this"
+        // value when the callback is invoked.
+        Polymer.RenderStatus.beforeNextRender(this, function () {
           this._originalMaxViewableItems = this.maxViewableItems;
-          
-          var autocompleteHours = this.$['autocomplete-hours']; 
+
+          var autocompleteHours = this.$['autocomplete-hours'];
           var autocompleteMinutes = this.$['autocomplete-minutes'];
           var autocompleteSeconds = this.$['autocomplete-seconds'];
 
@@ -305,274 +302,275 @@ If you include this element as part of `paper-dialog`, use the class
           autocompleteHours.addEventListener('autocomplete-selected', this._onHourSelected.bind(this));
           autocompleteMinutes.addEventListener('autocomplete-selected', this._onMinuteSelected.bind(this));
           autocompleteSeconds.addEventListener('autocomplete-selected', this._onSecondSelected.bind(this));
-        },
-        onTimePickerOpen: function () {
-          this._fitSuggestionsToViewport(this.$['autocomplete-hours']);
-          this._fitSuggestionsToViewport(this.$['autocomplete-minutes']);
-          this._fitSuggestionsToViewport(this.$['autocomplete-seconds']);
-          this.focusHoursInput();
-        },
-        focusHoursInput: function () {
-          this.$['hours-input'].focus();
-        },
-        focusMinutesInput: function() {
-          this.$['minutes-input'].focus();
-        },
-        focusSecondsInput: function() {
-          this.$['seconds-input'].focus();
-        },
-        closeDialogEvent: function() {
-          this.fire('close');
-        },
-        _handleKeyDown: function (event) {
-          var highlightedHour = this.$['autocomplete-hours'].highlightedSuggestion;
-          var hourChosen = !(highlightedHour === null || highlightedHour === undefined || this._isEmpty(highlightedHour));
-          var hourFocused = event.currentTarget === this.$['hours-input'];
+        });
+      }
 
-          var highlightedMinute = this.$['autocomplete-minutes'].highlightedSuggestion;
-          var minuteChosen = !(highlightedMinute === null || highlightedMinute === undefined || this._isEmpty(highlightedMinute));
-          var minuteFocused = event.currentTarget === this.$['minutes-input'];
+      onTimePickerOpen() {
+        this._fitSuggestionsToViewport(this.$['autocomplete-hours']);
+        this._fitSuggestionsToViewport(this.$['autocomplete-minutes']);
+        this._fitSuggestionsToViewport(this.$['autocomplete-seconds']);
+        this.focusHoursInput();
+      }
+      focusHoursInput() {
+        this.$['hours-input'].focus();
+      }
+      focusMinutesInput() {
+        this.$['minutes-input'].focus();
+      }
+      focusSecondsInput() {
+        this.$['seconds-input'].focus();
+      }
+      closeDialogEvent() {
+        this.fire('close');
+      }
+      _handleKeyDown(event) {
+        var highlightedHour = this.$['autocomplete-hours'].highlightedSuggestion;
+        var hourChosen = !(highlightedHour === null || highlightedHour === undefined || this._isEmpty(highlightedHour));
+        var hourFocused = event.currentTarget === this.$['hours-input'];
 
-          var highlightedSecond = this.$['autocomplete-seconds'].highlightedSuggestion;
-          var secondChosen = !(highlightedSecond === null || highlightedSecond === undefined || this._isEmpty(highlightedSecond));
-          var secondFocused = event.currentTarget === this.$['seconds-input'];
+        var highlightedMinute = this.$['autocomplete-minutes'].highlightedSuggestion;
+        var minuteChosen = !(highlightedMinute === null || highlightedMinute === undefined || this._isEmpty(highlightedMinute));
+        var minuteFocused = event.currentTarget === this.$['minutes-input'];
 
-          if (event.keyCode === KEY_CODES.ENTER || (event.keyCode === KEY_CODES.TAB && event.shiftKey === false)) {
-            event.preventDefault();
+        var highlightedSecond = this.$['autocomplete-seconds'].highlightedSuggestion;
+        var secondChosen = !(highlightedSecond === null || highlightedSecond === undefined || this._isEmpty(highlightedSecond));
+        var secondFocused = event.currentTarget === this.$['seconds-input'];
 
-            // If we're on the hour input, and no items in the dropdown have been chosen, we go to minutes without changing anything
-            if (hourFocused && !hourChosen) {
-              this.focusMinutesInput();
-            } else if (minuteFocused && !minuteChosen) {
-              if (this.enableSeconds) {
-                this.focusSecondsInput();
-              } else {
-                this.closeDialogEvent();
-              }
-            } else if (this.enableSeconds && (secondFocused && !secondChosen)) {
+        if (event.keyCode === KEY_CODES.ENTER || (event.keyCode === KEY_CODES.TAB && event.shiftKey === false)) {
+          event.preventDefault();
+
+          // If we're on the hour input, and no items in the dropdown have been chosen, we go to minutes without changing anything
+          if (hourFocused && !hourChosen) {
+            this.focusMinutesInput();
+          } else if (minuteFocused && !minuteChosen) {
+            if (this.enableSeconds) {
+              this.focusSecondsInput();
+            } else {
               this.closeDialogEvent();
             }
-          }
-        },
-        _onHourSelected: function(event){
-          this.hour = parseInt(event.detail.text);
-          this.focusMinutesInput();
-        },
-        _onMinuteSelected: function(event){
-          this.minute = parseInt(event.detail.text);
-          if(this.enableSeconds){
-            this.focusSecondsInput();
-          } else {
+          } else if (this.enableSeconds && (secondFocused && !secondChosen)) {
             this.closeDialogEvent();
           }
-        },
-        _onSecondSelected: function(event){
-          this.second = parseInt(event.detail.text);
+        }
+      }
+      _onHourSelected(event) {
+        this.hour = parseInt(event.detail.text);
+        this.focusMinutesInput();
+      }
+      _onMinuteSelected(event) {
+        this.minute = parseInt(event.detail.text);
+        if (this.enableSeconds) {
+          this.focusSecondsInput();
+        } else {
           this.closeDialogEvent();
-        },
-        _returnAllResults: function (datasource, query) {
-          // Must deep copy or it fails to re-open
-          var results = [];
-          datasource.forEach(function (item) {
-            var copyItem = { text: item.text, value: item.value };
-            results.push(copyItem);
-          })
-          return results;
-        },
-        _updateTime: function () {
-          this.time = this._formatTime(this.hour, this.minute, this.second);
-        },
-        _getHoursList: function () {
-          var hoursList = [];
-          for (var i = 0; i < 24; i++) {
-            // Note - Strings must be used with these "values", as the autocomplete tries to get a "length" of your value.
-            // I.e. Number values have no "length" property and will thus fail to produce a suggestion.
-            var x = ("" + i);
-            hoursList.push({ "text": x, "value": x });
-          }
-          return hoursList;
-        },
-        _getMinutesAndSecondsList: function (ev) {
-          var numbersList = [];
-          for (var i = 0; i < 60; i++) {
-            if (i % this.timeInterval === 0) {
+        }
+      }
+      _onSecondSelected(event) {
+        this.second = parseInt(event.detail.text);
+        this.closeDialogEvent();
+      }
+      _returnAllResults(datasource, query) {
+        // Must deep copy or it fails to re-open
+        var results = [];
+        datasource.forEach(function (item) {
+          var copyItem = { text: item.text, value: item.value };
+          results.push(copyItem);
+        })
+        return results;
+      }
+      _updateTime() {
+        this.time = this._formatTime(this.hour, this.minute, this.second);
+      }
+      _getHoursList() {
+        var hoursList = [];
+        for (var i = 0; i < 24; i++) {
+          // Note - Strings must be used with these "values", as the autocomplete tries to get a "length" of your value.
+          // I.e. Number values have no "length" property and will thus fail to produce a suggestion.
+          var x = ("" + i);
+          hoursList.push({ "text": x, "value": x });
+        }
+        return hoursList;
+      }
+      _getMinutesAndSecondsList(ev) {
+        var numbersList = [];
+        for (var i = 0; i < 60; i++) {
+          if (i % this.timeInterval === 0) {
             // Note - Strings must be used with these "values", as the autocomplete tries to get a "length" of your value.
             // I.e. Number values have no "length" property and will thus fail to produce a suggestion.
             var x = this._zeroPad(i, 2);
             numbersList.push({ "text": x, "value": x });
-            }
           }
-          return numbersList;
-        },
-        _timeChanged: function(time) {
-          if (!time) {
-            this._setTimeObjects(0,0,0);
-            return;
-          }
-          var parsed = this._parseTimeWithPeriod(time);
-          var cleanedTime = this._formatTime(parsed.hour, parsed.minute, parsed.second);
-          this._setTimeObjects(parsed.hour, parsed.minute, parsed.second);
-        },
-        _setTimeObjects:function(hour,min,sec){
-          this.hour = hour;
-          this.minute = min;
-          if (this.enableSeconds) {
-            this.second = sec;
-          }
-        },
-        _formatTime: function(hour, minute, second) {
-          minute = ('0' + minute).substr(-2);
-          second = ('0' + second).substr(-2);
-          if (this.enableSeconds) {
-            minute += ':' + second;
-          }
-          var period = "";
-          if (this.useTwelveHourClock) {
-            if (hour === 0) {
-              hour = 12;
-              period = "AM";
-            } else if (hour === 12) {
-              period = "PM";
-            } else if (hour > 12) {
-              hour = hour - 12;
-              period = "PM";
-            } else {
-              period = "AM";
-            }
-          } 
-          return hour + ':' + minute + " " + period;
-        },
-        _parseTimeWithPeriod: function(timeString) {
-          var pattern = /^\s*(\d{1,2}):?(\d{2})(:?(\d{2}))?(\s*([AaPp])\.?[Mm]\.?|[A-Z])?\s*$/;
-          var match = timeString.match(pattern);
-          if (!match) {
-            warn('Invalid time:', timeString);
-            return;
-          }
-          var hour = parseInt(match[1]);
-          var minute = parseInt(match[2]);
-          var second = match[4] ? parseInt(match[4]) : 0;
-          var period = match[6] ? (match[6][0].toUpperCase() + 'M') : match[6];
-          if (period === 'PM' && hour < 12) {
-            hour = (hour + 12) % 24;
-          } else if (period === 'AM' && hour === 12) {
-            hour = 0;
-          }
-          return {hour: hour, minute: minute, second: second};
-        },
-        _hourChanged: function(hour, oldValue) {
-          hour = parseInt(hour);
-          if (isNaN(hour) && !hour) {
-            return;
-          }
-          if (isNaN(hour)) {
-            this.hour = oldValue;
-            return;
-          }
-          // To handle 24 and above (even though input limited prevents over 24hr anyway)
-          var numberOf24s = parseInt(hour / 24);
-          var hoursToSubtract = numberOf24s * 24;
-          hour = hour - (hoursToSubtract);
-
-          this.hour = hour;
-          this.$['hours-input'].value = "" + hour;
-        },
-        _hoursInputValueChanged: function () {
-          var value = this.$['hours-input'].value;
-          if (value > 24) {
-            value = value - (parseInt(value / 24) * 24);
-            this.$['hours-input'].value = value;
-          }
-          if (isNaN(value) || !value || value < 0) {
-            return;
-          }
-          this.hour = value;
-        },
-        _minuteChanged: function(minute) {
-          minute = parseFloat(minute) % 60;
-          this.minute = minute;
-          this.$['minutes-input'].value = this._zeroPad(minute, 2);
-        },
-        _minutesInputValueChanged: function(value) {
-          var value = this.$['minutes-input'].value;
-          if (isNaN(value) || !value || value.length < 2 || value > 59) {
-            return;
-          }
-          this.minute = value;  
-        },
-        _secondChanged: function(second) {
-          second = parseFloat(second) % 60;
-          this.second = second;
-          this.$['seconds-input'].value = this._zeroPad(second, 2);
-        },
-        _secondsInputValueChanged: function(value) {
-          var value = this.$['seconds-input'].value;
-          if (isNaN(value) || !value || value.length < 2 || value > 59) {
-            return;
-          }
-          this.second = value;   
-        },
-        _zeroPad: function(value, length) {
-          if (value === undefined || isNaN(value) || isNaN(length)) {
-            return;
-          }
-          return ('0' + value).substr(-length);
-        },
-        _inputFocus: function(ev) {
-          this.$['iron-selector'].selected = ev.target.name;
-          ev.target.$.input.select();
-        },
-        _isEqual: function(a, b) {
-          return a === b;
-        },
-        _isEmpty: function (obj) {
-          for (var key in obj) {
-            if (obj.hasOwnProperty(key))
-              return false;
-          }
-          return true;
-        },
-        _fitSuggestionsToViewport: function (suggestionBox) {
-          // 1) check if its in viewport.
-          // 2) if not, place the dropdown on top then check if it's in viewport.
-          // 3) if not, reduce height of dropdown and go back to 1). Repeat until in viewport.
-          const xTranslate = this.$['hours-input'].clientWidth / 2;
-          const inputHeight = this.$['hours-input'].clientHeight;
-
-          // Set boxes to original positions
-          this.maxViewableItems = this._originalMaxViewableItems > suggestionBox.source.length 
-            ? suggestionBox.source.length 
-            : this._originalMaxViewableItems;
-
-          suggestionBox._itemHeightChanged();
-          suggestionBox.style.transform = "translate(-" + xTranslate  + "px, " + (inputHeight / 2) + "px)";
-
-          var suggestionsHeight = suggestionBox._itemHeight * suggestionBox.maxViewableItems;
-
-          while (!this._isYPositionWithinViewport(suggestionBox.getBoundingClientRect().bottom + suggestionsHeight)) {
-            const upModeYPos = inputHeight + suggestionsHeight;
-            const newYPosition = upModeYPos - (inputHeight / 2);
-
-            // Move the drawer go up instead
-            suggestionBox.style.transform = "translate(-" + xTranslate + "px, -" + newYPosition + "px)";
-
-            // If it's still not inside, we go back to normal then reduce max size by 1
-            if(!this._isYPositionWithinViewport(suggestionBox.getBoundingClientRect().top)){
-              this.maxViewableItems--;
-              
-              suggestionsHeight = suggestionBox._itemHeight * suggestionBox.maxViewableItems;
-              suggestionBox.style.transform = "translate(-" + xTranslate + "px, " + (inputHeight / 2) + "px)";
-              suggestionBox._itemHeightChanged();
-            }  
-          }
-        },
-        _isYPositionWithinViewport: function(yPos) {
-          return (
-            yPos >= 0 &&
-            yPos <= (window.innerHeight || document.documentElement.clientHeight)
-          );
         }
-      });
-    })();
+        return numbersList;
+      }
+      _timeChanged(time) {
+        if (!time) {
+          this._setTimeObjects(0, 0, 0);
+          return;
+        }
+        var parsed = this._parseTimeWithPeriod(time);
+        var cleanedTime = this._formatTime(parsed.hour, parsed.minute, parsed.second);
+        this._setTimeObjects(parsed.hour, parsed.minute, parsed.second);
+      }
+      _setTimeObjects(hour, min, sec) {
+        this.hour = hour;
+        this.minute = min;
+        if (this.enableSeconds) {
+          this.second = sec;
+        }
+      }
+      _formatTime(hour, minute, second) {
+        minute = ('0' + minute).substr(-2);
+        second = ('0' + second).substr(-2);
+        if (this.enableSeconds) {
+          minute += ':' + second;
+        }
+        var period = "";
+        if (this.useTwelveHourClock) {
+          if (hour === 0) {
+            hour = 12;
+            period = "AM";
+          } else if (hour === 12) {
+            period = "PM";
+          } else if (hour > 12) {
+            hour = hour - 12;
+            period = "PM";
+          } else {
+            period = "AM";
+          }
+        }
+        return hour + ':' + minute + " " + period;
+      }
+      _parseTimeWithPeriod(timeString) {
+        var pattern = /^\s*(\d{1,2}):?(\d{2})(:?(\d{2}))?(\s*([AaPp])\.?[Mm]\.?|[A-Z])?\s*$/;
+        var match = timeString.match(pattern);
+        if (!match) {
+          warn('Invalid time:', timeString);
+          return;
+        }
+        var hour = parseInt(match[1]);
+        var minute = parseInt(match[2]);
+        var second = match[4] ? parseInt(match[4]) : 0;
+        var period = match[6] ? (match[6][0].toUpperCase() + 'M') : match[6];
+        if (period === 'PM' && hour < 12) {
+          hour = (hour + 12) % 24;
+        } else if (period === 'AM' && hour === 12) {
+          hour = 0;
+        }
+        return { hour: hour, minute: minute, second: second };
+      }
+      _hourChanged(hour, oldValue) {
+        hour = parseInt(hour);
+        if (isNaN(hour) && !hour) {
+          return;
+        }
+        if (isNaN(hour)) {
+          this.hour = oldValue;
+          return;
+        }
+        // To handle 24 and above (even though input limited prevents over 24hr anyway)
+        var numberOf24s = parseInt(hour / 24);
+        var hoursToSubtract = numberOf24s * 24;
+        hour = hour - (hoursToSubtract);
+
+        this.hour = hour;
+        this.$['hours-input'].value = "" + hour;
+      }
+      _hoursInputValueChanged() {
+        var value = this.$['hours-input'].value;
+        if (value > 24) {
+          value = value - (parseInt(value / 24) * 24);
+          this.$['hours-input'].value = value;
+        }
+        if (isNaN(value) || !value || value < 0) {
+          return;
+        }
+        this.hour = value;
+      }
+      _minuteChanged(minute) {
+        minute = parseFloat(minute) % 60;
+        this.minute = minute;
+        this.$['minutes-input'].value = this._zeroPad(minute, 2);
+      }
+      _minutesInputValueChanged(value) {
+        var value = this.$['minutes-input'].value;
+        if (isNaN(value) || !value || value.length < 2 || value > 59) {
+          return;
+        }
+        this.minute = value;
+      }
+      _secondChanged(second) {
+        second = parseFloat(second) % 60;
+        this.second = second;
+        this.$['seconds-input'].value = this._zeroPad(second, 2);
+      }
+      _secondsInputValueChanged(value) {
+        var value = this.$['seconds-input'].value;
+        if (isNaN(value) || !value || value.length < 2 || value > 59) {
+          return;
+        }
+        this.second = value;
+      }
+      _zeroPad(value, length) {
+        if (value === undefined || isNaN(value) || isNaN(length)) {
+          return;
+        }
+        return ('0' + value).substr(-length);
+      }
+      _inputFocus(ev) {
+        this.$['iron-selector'].selected = ev.target.name;
+        ev.target.$.input.select();
+      }
+      _isEqual(a, b) {
+        return a === b;
+      }
+      _isEmpty(obj) {
+        for (var key in obj) {
+          if (obj.hasOwnProperty(key))
+            return false;
+        }
+        return true;
+      }
+      _fitSuggestionsToViewport(suggestionBox) {
+        // 1) check if its in viewport.
+        // 2) if not, place the dropdown on top then check if it's in viewport.
+        // 3) if not, reduce height of dropdown and go back to 1). Repeat until in viewport.
+        const xTranslate = this.$['hours-input'].clientWidth / 2;
+        const inputHeight = this.$['hours-input'].clientHeight;
+
+        // Set boxes to original positions
+        this.maxViewableItems = this._originalMaxViewableItems > suggestionBox.source.length
+          ? suggestionBox.source.length
+          : this._originalMaxViewableItems;
+
+        suggestionBox._itemHeightChanged();
+        suggestionBox.style.transform = "translate(-" + xTranslate + "px, " + (inputHeight / 2) + "px)";
+
+        var suggestionsHeight = suggestionBox._itemHeight * suggestionBox.maxViewableItems;
+
+        while (!this._isYPositionWithinViewport(suggestionBox.getBoundingClientRect().bottom + suggestionsHeight)) {
+          const upModeYPos = inputHeight + suggestionsHeight;
+          const newYPosition = upModeYPos - (inputHeight / 2);
+
+          // Move the drawer go up instead
+          suggestionBox.style.transform = "translate(-" + xTranslate + "px, -" + newYPosition + "px)";
+
+          // If it's still not inside, we go back to normal then reduce max size by 1
+          if (!this._isYPositionWithinViewport(suggestionBox.getBoundingClientRect().top)) {
+            this.maxViewableItems--;
+
+            suggestionsHeight = suggestionBox._itemHeight * suggestionBox.maxViewableItems;
+            suggestionBox.style.transform = "translate(-" + xTranslate + "px, " + (inputHeight / 2) + "px)";
+            suggestionBox._itemHeightChanged();
+          }
+        }
+      }
+      _isYPositionWithinViewport(yPos) {
+        return (
+          yPos >= 0 &&
+          yPos <= (window.innerHeight || document.documentElement.clientHeight)
+        );
+      }
+    }
   </script>
 </dom-module>
